@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laura Comanac — UX/UI Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A0A0A; --bg-2: #111111; --bg-3: #161616;
+      --text: #F0EDE7; --text-dim: #888880; --text-muted: #4A4A4A;
+      --accent: #9B5DE5; --accent-rgb: 155, 93, 229;
+      --border: rgba(240,237,231,.07); --border-2: rgba(240,237,231,.15);
+      --ease-out: cubic-bezier(0.16,1,0.3,1); --ease-circ: cubic-bezier(0.76,0,0.24,1);
+      --font-head: 'Space Grotesk', sans-serif; --font-body: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.6; overflow-x: hidden; cursor: none; }
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.028; pointer-events:none; z-index:9900; }
+
+    /* CURSOR */
+    #cursor-dot,#cursor-ring { position:fixed; pointer-events:none; border-radius:50%; transform:translate(-50%,-50%); z-index:9999; }
+    #cursor-dot { width:6px; height:6px; background:var(--text); transition:width .2s var(--ease-out),height .2s var(--ease-out),opacity .2s; }
+    #cursor-ring { width:34px; height:34px; border:1px solid rgba(240,237,231,.3); transition:width .45s var(--ease-out),height .45s var(--ease-out),border-color .3s,background .3s; }
+    body.c-hover #cursor-dot { width:0; height:0; opacity:0; }
+    body.c-hover #cursor-ring { width:60px; height:60px; border-color:var(--accent); background:rgba(var(--accent-rgb),.08); }
+
+    /* PRELOADER */
+    #preloader { position:fixed; inset:0; background:var(--bg); z-index:9998; display:flex; align-items:center; justify-content:center; transition:clip-path .9s var(--ease-circ); clip-path:inset(0 0 0 0); }
+    #preloader.out { clip-path:inset(0 0 100% 0); }
+    .pre-logo { font-family:var(--font-head); font-size:clamp(4rem,10vw,9rem); font-weight:700; letter-spacing:-.04em; overflow:hidden; display:flex; }
+    .pre-logo span { display:inline-block; opacity:0; transform:translateY(110%); animation:pre-in .7s var(--ease-out) forwards; }
+    .pre-logo span:nth-child(2) { animation-delay:.08s; color:var(--accent); }
+    @keyframes pre-in { to { opacity:1; transform:translateY(0); } }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:1.5rem clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; transition:background .4s; }
+    nav.stuck { background:rgba(10,10,10,.85); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:var(--font-head); font-size:1rem; font-weight:700; letter-spacing:-.02em; color:var(--text); cursor:pointer; background:none; border:none; }
+    .nav-logo em { color:var(--accent); font-style:normal; }
+    .nav-list { display:flex; gap:2.5rem; list-style:none; }
+    .nav-link { font-size:.85rem; color:var(--text-dim); letter-spacing:.02em; position:relative; transition:color .3s; cursor:pointer; background:none; border:none; font-family:var(--font-body); padding:0; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background:var(--accent); transition:width .35s var(--ease-out); }
+    .nav-link:hover,.nav-link.is-active { color:var(--text); }
+    .nav-link:hover::after,.nav-link.is-active::after { width:100%; }
+    .nav-cta { font-size:.78rem !important; font-weight:600 !important; color:var(--bg) !important; background:var(--accent) !important; padding:.45rem 1.2rem !important; border-radius:100px; letter-spacing:.04em !important; transition:transform .3s var(--ease-out),box-shadow .3s; }
+    .nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(var(--accent-rgb),.3); }
+    .nav-cta::after { display:none !important; }
+
+    /* PAGE SYSTEM */
+    .page { display:none; }
+    .page.active { display:block; animation:page-in .5s var(--ease-out); }
+    @keyframes page-in { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    /* SHARED */
+    .section { padding:clamp(5rem,9vw,9rem) clamp(1.5rem,5vw,4rem); }
+    .s-label { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:.9rem; }
+    .s-title { font-family:var(--font-head); font-size:clamp(2rem,4vw,3.2rem); font-weight:700; letter-spacing:-.03em; line-height:1.1; }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; font-family:var(--font-head); font-size:.88rem; font-weight:600; letter-spacing:.01em; border-radius:100px; transition:transform .35s var(--ease-out),box-shadow .35s,color .3s,gap .3s; position:relative; overflow:hidden; cursor:pointer; border:none; background:none; text-decoration:none; }
+    .btn-primary { background:var(--accent); color:var(--bg); padding:.85rem 2rem; }
+    .btn-primary::before { content:''; position:absolute; inset:0; background:rgba(255,255,255,.22); transform:translateX(-105%); transition:transform .5s var(--ease-out); }
+    .btn-primary:hover::before { transform:translateX(105%); }
+    .btn-primary:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(var(--accent-rgb),.35); }
+    .btn-ghost { color:var(--text-dim); padding:0; }
+    .btn-ghost:hover { color:var(--text); gap:.75rem; }
+    .btn-outline { border:1px solid var(--accent); color:var(--accent); padding:1rem 2.5rem; background:transparent; }
+    .btn-outline:hover { background:var(--accent); color:var(--bg); transform:translateY(-4px); box-shadow:0 18px 44px rgba(var(--accent-rgb),.3); }
+    .tag { font-size:.65rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); border:1px solid var(--border); padding:.18rem .6rem; border-radius:100px; }
+
+    /* ═══ HOME HERO ═══ */
+    #hero { min-height:100vh; padding:clamp(1.5rem,5vw,4rem); padding-top:9rem; padding-bottom:5rem; display:flex; flex-direction:column; justify-content:flex-end; position:relative; overflow:hidden; }
+    .hero-grid-bg { position:absolute; inset:0; background-image:linear-gradient(rgba(240,237,231,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,231,.03) 1px,transparent 1px); background-size:72px 72px; mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 75%); pointer-events:none; }
+    .hero-orb { position:absolute; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle,rgba(var(--accent-rgb),.07) 0%,transparent 68%); top:-200px; right:-150px; pointer-events:none; animation:orb-drift 9s ease-in-out infinite; }
+    .hero-orb2 { position:absolute; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(var(--accent-rgb),.04) 0%,transparent 70%); bottom:-100px; left:-100px; pointer-events:none; animation:orb-drift 12s ease-in-out infinite reverse; }
+    @keyframes orb-drift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-40px,30px) scale(1.06)} 66%{transform:translate(25px,-40px) scale(.95)} }
+    .hero-badge { position:absolute; top:7.5rem; right:clamp(1.5rem,5vw,4rem); display:inline-flex; align-items:center; gap:.5rem; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; font-weight:500; color:var(--accent); border:1px solid rgba(var(--accent-rgb),.3); padding:.35rem .9rem; border-radius:100px; opacity:0; animation:fade-in .8s var(--ease-out) 2s forwards; }
+    .badge-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+    .hero-label { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--text-muted); font-weight:500; margin-bottom:1.5rem; overflow:hidden; }
+    .hero-label span { display:inline-block; animation:slide-up .8s var(--ease-out) .7s both; }
+    .hero-h1 { font-family:var(--font-head); font-size:clamp(3.2rem,7.5vw,8.5rem); font-weight:700; letter-spacing:-.035em; line-height:1.0; margin-bottom:2.5rem; max-width:20ch; }
+    .hero-h1 .line { overflow:hidden; display:block; }
+    .hero-h1 .line span { display:block; opacity:0; transform:translateY(110%); }
+    .hero-h1:not(.no-anim) .line:nth-child(1) span { animation:slide-up-fade .9s var(--ease-out) .9s forwards; }
+    .hero-h1:not(.no-anim) .line:nth-child(2) span { animation:slide-up-fade .9s var(--ease-out) 1.05s forwards; }
+    .hero-h1:not(.no-anim) .line:nth-child(3) span { animation:slide-up-fade .9s var(--ease-out) 1.2s forwards; }
+    .hero-h1.no-anim .line span { opacity:1; transform:none; }
+    .hero-h1 .ital { color:var(--accent); font-style:italic; }
+    .hero-h1 .line span.spotlight { -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:inherit; }
+    @keyframes slide-up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes slide-up-fade { from{opacity:0;transform:translateY(110%)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+    @keyframes fade-in-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .hero-footer { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap; }
+    .hero-desc { font-size:clamp(.9rem,1.4vw,1.05rem); color:var(--text-dim); max-width:44ch; line-height:1.75; opacity:0; animation:fade-in-up .8s var(--ease-out) 1.55s forwards; }
+    .hero-desc strong { color:var(--text); font-weight:500; }
+    .hero-actions { display:flex; gap:1rem; align-items:center; opacity:0; animation:fade-in-up .8s var(--ease-out) 1.75s forwards; }
+    .scroll-hint { position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:.5rem; opacity:0; animation:fade-in .8s var(--ease-out) 2.2s forwards; }
+    .scroll-line { width:1px; height:44px; background:linear-gradient(to bottom,transparent,var(--text-muted)); animation:scroll-anim 2s ease-in-out infinite; }
+    @keyframes scroll-anim { 0%,100%{transform:scaleY(1);opacity:.4} 50%{transform:scaleY(.5);opacity:.9} }
+    .scroll-txt { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); writing-mode:vertical-rl; }
+
+    /* MARQUEE */
+    .marquee-wrap { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:1rem 0; }
+    .marquee-track { display:flex; width:max-content; animation:ticker 28s linear infinite; }
+    .marquee-item { display:flex; align-items:center; gap:1.5rem; padding:0 2rem; font-family:var(--font-head); font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap; }
+    .marquee-dot { width:4px; height:4px; background:var(--accent); border-radius:50%; flex-shrink:0; }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* HOME ABOUT */
+    #home-about { display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem,6vw,7rem); align-items:start; }
+    .about-body { font-size:clamp(.95rem,1.5vw,1.1rem); color:var(--text-dim); line-height:1.8; margin-top:1.5rem; }
+    .about-body+.about-body { margin-top:1rem; }
+    .about-body strong { color:var(--text); font-weight:500; }
+    .about-stats { display:flex; gap:2.5rem; margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border); flex-wrap:wrap; }
+    .stat-n { font-family:var(--font-head); font-size:2.4rem; font-weight:700; letter-spacing:-.04em; line-height:1; }
+    .stat-n em { color:var(--accent); font-style:normal; }
+    .stat-l { font-size:.72rem; color:var(--text-muted); letter-spacing:.06em; text-transform:uppercase; margin-top:.2rem; }
+    .srv-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-top:2.5rem; }
+    .srv-cell { background:var(--bg); padding:1.5rem; transition:background .3s; }
+    .srv-cell:hover { background:var(--bg-2); }
+    .srv-ico { width:28px; height:28px; color:var(--accent); margin-bottom:.75rem; }
+    .srv-name { font-family:var(--font-head); font-size:.9rem; font-weight:600; letter-spacing:-.01em; margin-bottom:.3rem; }
+    .srv-desc { font-size:.78rem; color:var(--text-muted); line-height:1.55; }
+
+    /* PROJECT ROWS (shared) */
+    .work-head { padding:0 clamp(1.5rem,5vw,4rem); display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:3rem; gap:1rem; flex-wrap:wrap; }
+    .proj-list { border-top:1px solid var(--border); }
+    .proj-row { border-bottom:1px solid var(--border); padding:2.2rem clamp(1.5rem,5vw,4rem); display:grid; grid-template-columns:3rem 1fr 3rem; gap:2rem; align-items:center; transition:background .3s; position:relative; overflow:hidden; }
+    .proj-row::before { content:''; position:absolute; left:0; top:0; width:3px; height:100%; background:var(--accent); transform:scaleY(0); transform-origin:bottom; transition:transform .45s var(--ease-out); }
+    .proj-row:hover::before { transform:scaleY(1); }
+    .proj-row:hover { background:var(--bg-2); }
+    .proj-row.hidden { display:none; }
+    .proj-n { font-family:var(--font-head); font-size:.75rem; font-weight:600; color:var(--text-muted); letter-spacing:.06em; }
+    .proj-tags { display:flex; gap:.4rem; margin-bottom:.45rem; flex-wrap:wrap; }
+    .proj-title { font-family:var(--font-head); font-size:clamp(1.4rem,2.8vw,2.4rem); font-weight:700; letter-spacing:-.025em; margin-bottom:.3rem; transition:color .3s; }
+    .proj-row:hover .proj-title { color:var(--accent); }
+    .proj-subtitle { font-size:.8rem; color:var(--text-muted); font-style:italic; margin-bottom:.4rem; line-height:1.45; }
+    .proj-desc { font-size:.88rem; color:var(--text-dim); max-width:62ch; line-height:1.6; }
+    .proj-tools { display:flex; gap:.4rem; margin-top:.6rem; flex-wrap:wrap; }
+    .proj-tool { font-size:.62rem; letter-spacing:.05em; color:var(--text-muted); background:var(--bg-3); padding:.15rem .55rem; border-radius:3px; font-weight:500; }
+    .proj-metric { display:inline-flex; align-items:center; gap:.4rem; font-size:.72rem; font-weight:600; color:var(--accent); background:rgba(var(--accent-rgb),.08); border:1px solid rgba(var(--accent-rgb),.2); padding:.2rem .7rem; border-radius:100px; margin-top:.5rem; }
+    .proj-arr { width:46px; height:46px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); flex-shrink:0; transition:background .3s,border-color .3s,color .3s,transform .4s var(--ease-out); }
+    .proj-row:hover .proj-arr { background:var(--accent); border-color:var(--accent); color:var(--bg); transform:rotate(45deg); }
+
+    /* IMPACT */
+    #impact { background:var(--bg-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .impact-grid { display:grid; grid-template-columns:repeat(3,1fr); margin-top:3rem; }
+    .impact-cell { padding:2.5rem 2rem; border-right:1px solid var(--border); }
+    .impact-cell:last-child { border-right:none; }
+    .impact-n { font-family:var(--font-head); font-size:clamp(3rem,5vw,5.5rem); font-weight:700; letter-spacing:-.04em; line-height:1; margin-bottom:.6rem; }
+    .impact-n .cnt { color:var(--accent); }
+    .impact-l { font-size:.85rem; color:var(--text-dim); line-height:1.55; max-width:22ch; }
+
+    /* TESTIMONIALS */
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3rem; }
+    .testi-card { background:var(--bg-2); border:1px solid var(--border); padding:2rem; border-radius:3px; position:relative; transition:border-color .3s,transform .4s var(--ease-out); }
+    .testi-card:hover { border-color:var(--border-2); transform:translateY(-5px); }
+    .testi-card::before { content:'"'; position:absolute; top:.75rem; right:1.25rem; font-family:var(--font-head); font-size:5rem; color:var(--accent); opacity:.12; line-height:1; font-weight:700; }
+    .testi-q { font-size:.92rem; color:var(--text-dim); line-height:1.8; font-style:italic; margin-bottom:1.5rem; }
+    .testi-who { display:flex; align-items:center; gap:.75rem; }
+    .testi-av { width:36px; height:36px; border-radius:50%; background:var(--bg-3); display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:.72rem; font-weight:700; color:var(--accent); flex-shrink:0; }
+    .testi-name { font-size:.85rem; font-weight:600; font-family:var(--font-head); }
+    .testi-role { font-size:.72rem; color:var(--text-muted); }
+
+    /* ═══ PORTFOLIO PAGE ═══ */
+    .pg-hero { padding:clamp(3rem,6vw,6rem) clamp(1.5rem,5vw,4rem) 2.5rem; padding-top:calc(clamp(3rem,6vw,6rem) + 5rem); border-bottom:1px solid var(--border); }
+    .pg-title { font-family:var(--font-head); font-size:clamp(3rem,7vw,7rem); font-weight:700; letter-spacing:-.04em; line-height:1; margin-bottom:1rem; }
+    .pg-title em { color:var(--accent); font-style:italic; }
+    .pg-sub { font-size:clamp(.9rem,1.5vw,1.1rem); color:var(--text-dim); max-width:55ch; line-height:1.7; }
+    .pg-sub strong { color:var(--text); font-weight:500; }
+    .filter-bar { padding:1.2rem clamp(1.5rem,5vw,4rem); display:flex; gap:.6rem; flex-wrap:wrap; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:68px; z-index:10; }
+    .filter-btn { font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600; font-family:var(--font-head); color:var(--text-muted); border:1px solid var(--border); background:none; padding:.4rem .9rem; border-radius:100px; cursor:pointer; transition:color .3s,border-color .3s,background .3s; }
+    .filter-btn:hover { color:var(--text); border-color:var(--border-2); }
+    .filter-btn.active { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+    .proj-section-label { padding:1.5rem clamp(1.5rem,5vw,4rem) .6rem; font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:600; border-bottom:1px solid var(--border); }
+    .proj-section-label.hidden { display:none; }
+    .proj-list.hidden { display:none; }
+
+    /* ═══ ABOUT PAGE ═══ */
+    .about-pg-top { padding:clamp(3rem,6vw,6rem) clamp(1.5rem,5vw,4rem) clamp(2rem,4vw,4rem); padding-top:calc(clamp(3rem,6vw,6rem)+5rem); display:grid; grid-template-columns:220px 1.4fr 1fr; gap:clamp(2rem,4vw,4rem); align-items:start; border-bottom:1px solid var(--border); }
+    .about-pg-title { font-family:var(--font-head); font-size:clamp(3rem,7vw,7rem); font-weight:700; letter-spacing:-.04em; line-height:1; margin-bottom:1.2rem; }
+    .about-pg-title em { color:var(--accent); font-style:italic; }
+    .about-pg-lead { font-size:clamp(1rem,1.6vw,1.2rem); color:var(--text-dim); line-height:1.8; font-style:italic; }
+    .about-pg-lead strong { color:var(--text); font-style:normal; font-weight:500; }
+    .about-detail { display:flex; gap:.75rem; align-items:baseline; margin-bottom:1rem; }
+    .about-detail-label { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); font-weight:600; min-width:90px; flex-shrink:0; }
+    .about-detail-val { font-size:.9rem; color:var(--text-dim); line-height:1.5; }
+    .about-detail-val strong { color:var(--accent); font-weight:500; }
+    .timeline-wrap { padding:clamp(4rem,7vw,7rem) clamp(1.5rem,5vw,4rem); }
+    .timeline-wrap.no-top { padding-top:0; }
+    .timeline { margin-top:2.5rem; position:relative; padding-left:2rem; }
+    .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:1px; background:var(--border); }
+    .tl-item { position:relative; padding-bottom:2.5rem; padding-left:1.5rem; }
+    .tl-item:last-child { padding-bottom:0; }
+    .tl-dot { position:absolute; left:-2.43rem; top:6px; width:9px; height:9px; border-radius:50%; border:2px solid var(--accent); background:var(--bg); transition:background .3s; }
+    .tl-item:hover .tl-dot,.tl-dot.now { background:var(--accent); }
+    .tl-date { font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:.35rem; }
+    .tl-role { font-family:var(--font-head); font-size:1.1rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.2rem; }
+    .tl-company { font-size:.9rem; color:var(--accent); font-weight:500; margin-bottom:.5rem; }
+    .tl-desc { font-size:.85rem; color:var(--text-dim); line-height:1.65; max-width:55ch; }
+    .edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2.5rem; }
+    .edu-card { background:var(--bg-2); border:1px solid var(--border); padding:2rem; border-radius:3px; transition:border-color .3s,transform .35s var(--ease-out); }
+    .edu-card:hover { border-color:var(--border-2); transform:translateY(-3px); }
+    .edu-degree { font-family:var(--font-head); font-size:1rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.4rem; }
+    .edu-school { font-size:.88rem; color:var(--accent); margin-bottom:.5rem; font-weight:500; }
+    .edu-period { font-size:.72rem; color:var(--text-muted); letter-spacing:.06em; text-transform:uppercase; }
+    .skills-wrap { padding:clamp(4rem,7vw,7rem) clamp(1.5rem,5vw,4rem); background:var(--bg-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem,6vw,6rem); margin-top:2.5rem; }
+    .skill-cat-title { font-family:var(--font-head); font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:1.2rem; }
+    .skill-pills { display:flex; flex-wrap:wrap; gap:.6rem; }
+    .skill-pill { font-size:.82rem; color:var(--text-dim); border:1px solid var(--border); padding:.4rem 1rem; border-radius:100px; transition:border-color .3s,color .3s; }
+    .skill-pill:hover { border-color:rgba(var(--accent-rgb),.4); color:var(--text); }
+    .certs-wrap { padding:clamp(4rem,7vw,7rem) clamp(1.5rem,5vw,4rem); }
+    .cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2rem; }
+    .cert-card { background:var(--bg-2); border:1px solid var(--border); padding:1.25rem 1.5rem; border-radius:3px; display:flex; align-items:center; gap:1rem; transition:border-color .3s; }
+    .cert-card:hover { border-color:var(--border-2); }
+    .cert-icon { color:var(--accent); flex-shrink:0; }
+    .cert-name { font-size:.88rem; font-weight:600; font-family:var(--font-head); line-height:1.3; }
+    .interests-wrap { padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem); background:var(--bg-2); border-top:1px solid var(--border); }
+    .interest-row { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem; }
+    .interest-pill { display:flex; align-items:center; gap:.6rem; background:var(--bg); border:1px solid var(--border); padding:.75rem 1.4rem; border-radius:100px; font-size:.9rem; color:var(--text-dim); transition:border-color .3s,color .3s; }
+    .interest-pill:hover { border-color:var(--border-2); color:var(--text); }
+    .interest-icon { color:var(--accent); }
+
+    /* ═══ CONTACT PAGE ═══ */
+    .contact-pg { min-height:calc(100vh - 70px); display:grid; grid-template-columns:1fr 1fr; padding-top:5rem; }
+    .contact-left { padding:clamp(4rem,8vw,8rem) clamp(2rem,5vw,5rem); display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--border); position:relative; overflow:hidden; }
+    .contact-glow { position:absolute; inset:0; background:radial-gradient(ellipse at 0% 100%,rgba(var(--accent-rgb),.07) 0%,transparent 55%); pointer-events:none; }
+    .contact-eye { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); font-weight:500; margin-bottom:1.5rem; }
+    .contact-h { font-family:var(--font-head); font-size:clamp(2.8rem,5.5vw,6rem); font-weight:700; letter-spacing:-.04em; line-height:.92; margin-bottom:2rem; }
+    .contact-h em { color:var(--accent); font-style:italic; }
+    .contact-sub { font-size:clamp(.9rem,1.4vw,1.05rem); color:var(--text-dim); max-width:46ch; line-height:1.75; margin-bottom:2.5rem; }
+    .contact-email-link { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--font-head); font-size:1rem; font-weight:600; color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(var(--accent-rgb),.3); padding-bottom:.2rem; transition:border-color .3s; }
+    .contact-email-link:hover { border-color:var(--accent); }
+    .contact-right { padding:clamp(4rem,8vw,8rem) clamp(2rem,5vw,5rem); display:flex; flex-direction:column; justify-content:center; }
+    .form-title { font-family:var(--font-head); font-size:1.2rem; font-weight:700; letter-spacing:-.02em; margin-bottom:2rem; }
+    .contact-form { display:flex; flex-direction:column; gap:1.25rem; }
+    .form-group { display:flex; flex-direction:column; gap:.5rem; }
+    .form-label { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); font-weight:600; }
+    .form-input,.form-textarea { background:var(--bg-2); border:1px solid var(--border); color:var(--text); font-family:var(--font-body); font-size:.95rem; padding:.85rem 1.1rem; border-radius:3px; outline:none; transition:border-color .3s; }
+    .form-input:focus,.form-textarea:focus { border-color:rgba(var(--accent-rgb),.5); }
+    .form-input::placeholder,.form-textarea::placeholder { color:var(--text-muted); }
+    .form-textarea { resize:vertical; min-height:110px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+    .form-success { display:none; text-align:center; padding:3rem 1rem; }
+    .form-success-icon { font-size:3rem; margin-bottom:1rem; color:var(--accent); }
+    .form-success h3 { font-family:var(--font-head); font-size:1.4rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.5rem; }
+    .form-success p { color:var(--text-dim); font-size:.95rem; }
+
+    /* FOOTER */
+    footer { padding:2rem clamp(1.5rem,5vw,4rem); border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-copy { font-size:.78rem; color:var(--text-muted); }
+    .footer-nav { display:flex; gap:2rem; }
+    .footer-nav button { font-size:.78rem; color:var(--text-muted); background:none; border:none; cursor:pointer; font-family:var(--font-body); transition:color .3s; padding:0; }
+    .footer-nav button:hover { color:var(--text); }
+
+    /* REVEAL */
+    .r { opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease-out),transform .8s var(--ease-out); }
+    .r.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
+    /* Portfolio + About rows are visible by default — page-in handles the entrance */
+    #page-portfolio .proj-row,
+    #page-about .tl-item,
+    #page-about .edu-card,
+    #page-about .skill-pill,
+    #page-about .cert-card,
+    #page-about .interest-pill { opacity:1 !important; transform:none !important; }
+
+    /* ═══ PROJECT DETAIL PAGE ═══ */
+    .pd-back { padding:1.5rem clamp(1.5rem,5vw,4rem); padding-top:calc(1.5rem + 5rem); border-bottom:1px solid var(--border); }
+    .pd-back-btn { display:inline-flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--text-dim); background:none; border:none; cursor:pointer; font-family:var(--font-body); transition:color .3s,gap .3s; padding:0; }
+    .pd-back-btn:hover { color:var(--text); gap:.75rem; }
+    .pd-hero { padding:clamp(3rem,6vw,6rem) clamp(1.5rem,5vw,4rem) clamp(2rem,4vw,4rem); border-bottom:1px solid var(--border); }
+    .pd-num { font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:1.2rem; display:block; }
+    .pd-hero-tags { display:flex; gap:.4rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .pd-title { font-family:var(--font-head); font-size:clamp(2.8rem,7vw,7rem); font-weight:700; letter-spacing:-.04em; line-height:1; margin-bottom:1rem; }
+    .pd-subtitle { font-size:clamp(.9rem,1.5vw,1.1rem); color:var(--text-muted); font-style:italic; margin-bottom:1.5rem; line-height:1.5; max-width:72ch; }
+    .pd-metric { display:inline-flex; align-items:center; gap:.4rem; font-size:.82rem; font-weight:700; color:var(--accent); background:rgba(var(--accent-rgb),.1); border:1px solid rgba(var(--accent-rgb),.25); padding:.35rem 1rem; border-radius:100px; margin-bottom:1.5rem; }
+    .pd-tools-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .pd-tool { font-size:.72rem; letter-spacing:.05em; color:var(--text-dim); background:var(--bg-2); border:1px solid var(--border); padding:.3rem .8rem; border-radius:3px; }
+    .pd-body { padding:clamp(3rem,6vw,6rem) clamp(1.5rem,5vw,4rem); display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem,6vw,6rem); align-items:start; border-bottom:1px solid var(--border); }
+    .pd-section { margin-bottom:2.5rem; }
+    .pd-section:last-child { margin-bottom:0; }
+    .pd-section-label { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:.85rem; }
+    .pd-text { font-size:clamp(.9rem,1.4vw,1.05rem); color:var(--text-dim); line-height:1.8; }
+    .pd-text strong { color:var(--text); font-weight:500; }
+    .pd-nav { padding:clamp(2rem,4vw,4rem) clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .pd-nav-btn { display:inline-flex; align-items:center; gap:.5rem; font-family:var(--font-head); font-size:.82rem; font-weight:600; color:var(--text-dim); background:none; border:1px solid var(--border); padding:.65rem 1.4rem; border-radius:100px; cursor:pointer; transition:color .3s,border-color .3s,gap .3s; }
+    .pd-nav-btn:hover { color:var(--text); border-color:var(--border-2); }
+    .pd-nav-btn.accent { color:var(--bg); background:var(--accent); border-color:var(--accent); transition:transform .3s var(--ease-out),box-shadow .3s; }
+    .pd-nav-btn.accent:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(var(--accent-rgb),.3); }
+    @media(max-width:900px){ .pd-body{grid-template-columns:1fr} }
+
+    /* ═══ PROJECT GALLERY ═══ */
+    .pd-gallery { padding:clamp(3rem,5vw,5rem) clamp(1.5rem,5vw,4rem); border-bottom:1px solid var(--border); }
+    .pd-gallery-label { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim); font-weight:600; margin-bottom:1.5rem; }
+    .pd-gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr)); gap:10px; }
+    .pd-gallery-item { border-radius:8px; overflow:hidden; background:var(--bg-3); cursor:zoom-in; }
+    .pd-gallery-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s var(--ease-out); }
+    .pd-gallery-item:hover img { transform:scale(1.04); }
+    .pd-gallery-item.land { aspect-ratio:16/10; }
+    .pd-gallery-item.port { aspect-ratio:2/3; }
+    .pd-gallery-item.sq { aspect-ratio:1; }
+    .pd-gallery-item.doc { aspect-ratio:3/4; }
+    .pd-gallery-item.doc img { object-position:top; }
+    /* lightbox */
+    #pd-lightbox { position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:9000; display:none; align-items:center; justify-content:center; cursor:zoom-out; padding:2rem; }
+    #pd-lightbox.open { display:flex; }
+    #pd-lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:8px; pointer-events:none; }
+
+    /* ═══ ABOUT PHOTO ═══ */
+    .about-photo-col { position:sticky; top:7rem; }
+    .about-photo-col img { width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center top; border-radius:12px; }
+    @media(max-width:1100px){ .about-pg-top{ grid-template-columns:1fr 1fr; } .about-photo-col{grid-column:1/-1;} .about-photo-col img{aspect-ratio:16/7;} }
+    @media(max-width:900px){ .about-pg-top{ grid-template-columns:1fr; } }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      #home-about{grid-template-columns:1fr;gap:3rem}
+      .srv-grid{grid-template-columns:1fr}
+      .impact-grid{grid-template-columns:1fr}
+      .impact-cell{border-right:none;border-bottom:1px solid var(--border)}
+      .impact-cell:last-child{border-bottom:none}
+      .testi-grid{grid-template-columns:1fr}
+      .proj-row{grid-template-columns:2.5rem 1fr}
+      .proj-arr{display:none}
+      .about-pg-top{grid-template-columns:1fr}
+      .edu-grid{grid-template-columns:1fr}
+      .skills-grid{grid-template-columns:1fr;gap:2rem}
+      .cert-grid{grid-template-columns:1fr}
+      .contact-pg{grid-template-columns:1fr}
+      .contact-left{border-right:none;border-bottom:1px solid var(--border)}
+      .form-row{grid-template-columns:1fr;gap:1.25rem}
+    }
+    @media(max-width:600px){
+      .nav-list{display:none}
+      .hero-footer{flex-direction:column;align-items:flex-start}
+      .work-head{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="pd-lightbox"><img id="pd-lightbox-img" src="" alt="Project screen" /></div>
+
+<div id="preloader"><div class="pre-logo"><span>L</span><span>C</span></div></div>
+
+<nav id="nav">
+  <button class="nav-logo" onclick="navigate('home')">Laura <em>Comanac</em></button>
+  <ul class="nav-list">
+    <li><button class="nav-link" data-page="home" onclick="navigate('home')">Home</button></li>
+    <li><button class="nav-link" data-page="portfolio" onclick="navigate('portfolio')">Portfolio</button></li>
+    <li><button class="nav-link" data-page="about" onclick="navigate('about')">About Me</button></li>
+    <li><button class="nav-link nav-cta" data-page="contact" onclick="navigate('contact')">Let's talk</button></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════ PAGE: HOME ══════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <section id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-badge"><div class="badge-dot"></div>Available for work</div>
+    <div class="hero-label"><span>UX/UI Designer · Laura Comanac</span></div>
+    <h1 class="hero-h1">
+      <div class="line"><span>I help companies</span></div>
+      <div class="line"><span>turn bold ideas into</span></div>
+      <div class="line"><span class="ital">intuitive pixels</span></div>
+    </h1>
+    <div class="hero-footer">
+      <p class="hero-desc">Bridging <strong>business goals</strong> and <strong>human needs</strong> through scalable design systems, AI workflows, and cross-platform experiences that actually convert.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="navigate('portfolio')">See Portfolio <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+        <button class="btn btn-ghost" onclick="navigate('contact')">Contact me <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <div class="scroll-hint"><div class="scroll-line"></div><div class="scroll-txt">Scroll</div></div>
+  </section>
+
+  <div class="marquee-wrap"><div class="marquee-track">
+    <div class="marquee-item"><div class="marquee-dot"></div>UX Strategy</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>User Research</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Wireframing</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Prototyping</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UI Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Design Systems</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Responsive Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Usability Testing</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>AI Workflows</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Product Strategy</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Design Leadership</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Figma</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UX Strategy</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>User Research</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Wireframing</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Prototyping</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UI Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Design Systems</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Responsive Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Usability Testing</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>AI Workflows</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Product Strategy</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Design Leadership</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Figma</div>
+  </div></div>
+
+  <section class="section" id="home-about">
+    <div>
+      <div class="s-label r">About</div>
+      <h2 class="s-title r d1">Bridging business goals<br>and human needs</h2>
+      <p class="about-body r d2">I'm a UX/UI Designer with a <strong>frontend background</strong>, specializing in experiences that are as beautiful as they are functional. I work at the intersection of <strong>design and technology</strong>, consulting on AI workflows, cross-platform systems, and scalable design thinking.</p>
+      <p class="about-body r d3">From AI-powered onboarding to biometric authentication and game economies — every project starts with <strong>research-backed strategy</strong> and ends with the sharp execution that turns complexity into <strong>clarity</strong>.</p>
+      <div class="about-stats r d4">
+        <div><div class="stat-n">15<em>+</em></div><div class="stat-l">Case Studies</div></div>
+        <div><div class="stat-n">50<em>%</em></div><div class="stat-l">Less friction</div></div>
+        <div><div class="stat-n">25<em>%</em></div><div class="stat-l">Purchase lift</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="s-label r d1">Services</div>
+      <div class="srv-grid r d2">
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+          <div class="srv-name">UX Strategy & Research</div><div class="srv-desc">Interviews, audits, competitor analysis</div>
+        </div>
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <div class="srv-name">Wireframing & Prototyping</div><div class="srv-desc">Lo-fi to hi-fi clickable prototypes</div>
+        </div>
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          <div class="srv-name">UI & Visual Design</div><div class="srv-desc">Pixel-perfect interfaces with strong hierarchy</div>
+        </div>
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div class="srv-name">Design Systems</div><div class="srv-desc">Scalable component libraries for teams</div>
+        </div>
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <div class="srv-name">Usability Testing</div><div class="srv-desc">Validated insights from real users</div>
+        </div>
+        <div class="srv-cell">
+          <svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+          <div class="srv-name">Responsive Web & App</div><div class="srv-desc">Cross-platform, every breakpoint</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-left:0;padding-right:0;">
+    <div class="work-head">
+      <div><div class="s-label r">Selected Work</div><h2 class="s-title r d1">Projects that move the needle</h2></div>
+      <button class="btn btn-ghost r" onclick="navigate('portfolio')">View all 15 projects <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="proj-list">
+      <div class="proj-row r"><div class="proj-n">01</div><div><div class="proj-tags"><span class="tag">SaaS</span><span class="tag">AI</span></div><div class="proj-title">Biometry</div><p class="proj-desc">Scaling AI with Biometrics — designed the end-to-end SaaS MVP onboarding flow, turning a technically complex process into a seamless first-time experience.</p></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      <div class="proj-row r d1"><div class="proj-n">02</div><div><div class="proj-tags"><span class="tag">B2B</span><span class="tag">Banking</span></div><div class="proj-title">Biometry Bank</div><p class="proj-desc">Biometric UX that reduced B2B login friction by 50% — rethought enterprise authentication to be fast, secure, and frictionless at scale.</p><div class="proj-metric">↓ 50% login friction</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      <div class="proj-row r d2"><div class="proj-n">03</div><div><div class="proj-tags"><span class="tag">Mobile</span><span class="tag">Gaming</span></div><div class="proj-title">Mobile Games</div><p class="proj-desc">Engineering game economies for scalability — designed UX systems behind in-app purchase flows and progression mechanics that engage and retain players long-term.</p></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      <div class="proj-row r d3"><div class="proj-n">04</div><div><div class="proj-tags"><span class="tag">Web</span><span class="tag">Startup</span></div><div class="proj-title">Presentation Website</div><p class="proj-desc">High-conversion startup growth design — crafted a presentation website that turns visitors into leads through strategic information architecture and visual storytelling.</p></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      <div class="proj-row r d4"><div class="proj-n">05</div><div><div class="proj-tags"><span class="tag">Mobile App</span><span class="tag">Social UX</span></div><div class="proj-title">Ascent</div><p class="proj-desc">Driving 25% increase in in-app purchases through social UX — redesigned community and progression features to create natural monetization moments.</p><div class="proj-metric">↑ 25% in-app purchases</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="impact">
+    <div class="s-label r">Impact</div>
+    <h2 class="s-title r d1">Design that drives<br>measurable results</h2>
+    <div class="impact-grid">
+      <div class="impact-cell r d1"><div class="impact-n"><span class="cnt" data-to="50">0</span>%</div><div class="impact-l">Reduction in B2B login friction for Biometry Bank</div></div>
+      <div class="impact-cell r d2"><div class="impact-n"><span class="cnt" data-to="25">0</span>%</div><div class="impact-l">Increase in in-app purchases for Ascent</div></div>
+      <div class="impact-cell r d3"><div class="impact-n"><span class="cnt" data-to="15">0</span>+</div><div class="impact-l">End-to-end product case studies across industries</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="s-label r">Testimonials</div>
+    <h2 class="s-title r d1">What collaborators say</h2>
+    <div class="testi-grid">
+      <div class="testi-card r d1"><p class="testi-q">"Laura restructured our onboarding flow in a way that actually made sense — our activation rate improved significantly within the first month."</p><div class="testi-who"><div class="testi-av">IT</div><div><div class="testi-name">Iulia Timofete</div><div class="testi-role">Product Manager</div></div></div></div>
+      <div class="testi-card r d2"><p class="testi-q">"Clean Figma files that our developers actually loved working with. Laura delivered investor-ready prototypes at an impressive pace without sacrificing quality."</p><div class="testi-who"><div class="testi-av">AA</div><div><div class="testi-name">Alexandru Andrei</div><div class="testi-role">CEO</div></div></div></div>
+      <div class="testi-card r d3"><p class="testi-q">"She gave our product a modern, professional look that finally matches the quality of our service. The attention to detail was exceptional from day one."</p><div class="testi-who"><div class="testi-av">MS</div><div><div class="testi-name">Matei Serban</div><div class="testi-role">Manager</div></div></div></div>
+    </div>
+  </section>
+
+  <footer><div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div><nav class="footer-nav"><button onclick="navigate('portfolio')">Portfolio</button><button onclick="navigate('about')">About Me</button><button onclick="navigate('contact')">Contact</button></nav></footer>
+</div>
+
+<!-- ══════════════════════════ PAGE: PORTFOLIO ══════════════════════════ -->
+<div class="page" id="page-portfolio">
+
+  <div class="pg-hero">
+    <div class="pg-title r">My <em>Work</em></div>
+    <p class="pg-sub r d1"><strong>15 case studies</strong> across SaaS, mobile, VR, branding and marketing — each rooted in research, built with precision.</p>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-cat="all">All (15)</button>
+    <button class="filter-btn" data-cat="saas">SaaS & Web</button>
+    <button class="filter-btn" data-cat="mobile">Mobile & Apps</button>
+    <button class="filter-btn" data-cat="vr">VR & Immersive</button>
+    <button class="filter-btn" data-cat="brand">Branding & Marketing</button>
+  </div>
+
+  <div class="proj-section-label" id="lbl-client">Client Work — 13 Projects</div>
+  <div class="proj-list" id="list-client">
+    <div class="proj-row r" data-cats="saas"><div class="proj-n">01</div><div><div class="proj-tags"><span class="tag">SaaS</span><span class="tag">AI</span><span class="tag">Onboarding</span></div><div class="proj-title">Biometry</div><p class="proj-subtitle">Scaling AI with Biometrics: How I Reduced Onboarding Friction for a SaaS MVP</p><p class="proj-desc">Redesigned the full onboarding journey for a biometric SaaS platform, transforming a multi-step technical flow into a frictionless, confidence-building first-time user experience.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Angular Fuse</span><span class="proj-tool">WCAG</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d1" data-cats="saas"><div class="proj-n">02</div><div><div class="proj-tags"><span class="tag">B2B</span><span class="tag">Banking</span><span class="tag">Biometrics</span></div><div class="proj-title">Biometry Bank</div><p class="proj-subtitle">Securing Success: How Biometric UX Cut Login Friction by 50% for a Global Bank</p><p class="proj-desc">Rethought the enterprise authentication experience end-to-end — making biometric login fast, secure, and frictionless for thousands of B2B users daily.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Gemini</span><span class="proj-tool">Material</span><span class="proj-tool">WCAG</span></div><div class="proj-metric">↓ 50% login friction</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d2" data-cats="mobile"><div class="proj-n">03</div><div><div class="proj-tags"><span class="tag">Mobile</span><span class="tag">Gaming</span><span class="tag">Economy</span></div><div class="proj-title">Mobile Games</div><p class="proj-subtitle">From Prototype to Powerhouse: Engineering Game Economies for Long-Term Scalability</p><p class="proj-desc">Designed UX systems for in-app purchase flows and progression mechanics that balance player engagement with sustainable monetization at scale.</p><div class="proj-tools"><span class="proj-tool">Figma Make</span><span class="proj-tool">Lovable</span><span class="proj-tool">Claude</span><span class="proj-tool">AntiGravity</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d3" data-cats="saas"><div class="proj-n">04</div><div><div class="proj-tags"><span class="tag">Web</span><span class="tag">Startup</span><span class="tag">Conversion</span></div><div class="proj-title">Presentation Website</div><p class="proj-subtitle">From Pitch to Profit: Designing a High-Conversion Website to Scale Startup Growth</p><p class="proj-desc">Crafted a startup's primary web presence with strategic information architecture, persuasive visual storytelling, and conversion-focused layout decisions throughout.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Framer</span><span class="proj-tool">Gemini</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d4" data-cats="mobile"><div class="proj-n">05</div><div><div class="proj-tags"><span class="tag">Mobile App</span><span class="tag">Social UX</span><span class="tag">Monetization</span></div><div class="proj-title">Ascent</div><p class="proj-subtitle">Monetizing the Beat: Driving a 25% Increase in In-App Purchases through Social UX</p><p class="proj-desc">Redesigned community and progression features to create natural, high-intent moments for in-app purchases — without disrupting the core user experience.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Leadership</span><span class="proj-tool">Apple</span><span class="proj-tool">WCAG</span></div><div class="proj-metric">↑ 25% in-app purchases</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r" data-cats="brand"><div class="proj-n">06</div><div><div class="proj-tags"><span class="tag">Ad Tech</span><span class="tag">Marketing</span></div><div class="proj-title">DreamSlip Ads</div><p class="proj-subtitle">Niche Ad Tech UX: Capturing the Market Through User-Centric Design</p><p class="proj-desc">Designed the UX for a niche ad platform, translating complex targeting and campaign management workflows into an interface that non-technical advertisers could navigate with confidence.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Leadership</span><span class="proj-tool">Material</span><span class="proj-tool">WCAG</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d1" data-cats="vr"><div class="proj-n">07</div><div><div class="proj-tags"><span class="tag">VR/AR</span><span class="tag">Immersive</span></div><div class="proj-title">VR Worlds</div><p class="proj-subtitle">The Immersive Edge: Why Moving from Mobile to VR Doubled User Retention</p><p class="proj-desc">Spearheaded the UX transition from a mobile product to a full VR experience — defining spatial interaction patterns, comfort guidelines, and onboarding for first-time VR users.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">XR/VR/AR</span><span class="proj-tool">Meta Horizon</span></div><div class="proj-metric">↑ 2× user retention</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d2" data-cats="saas"><div class="proj-n">08</div><div><div class="proj-tags"><span class="tag">Hardware UX</span><span class="tag">Accessibility</span></div><div class="proj-title">Selfiebot</div><p class="proj-subtitle">Tech for Everyone: Designing an Intuitive Interface that Eliminated Support Tickets</p><p class="proj-desc">Designed the touchscreen interface for a self-service kiosk product, prioritising accessibility and zero-learning-curve interactions for non-technical users of all ages.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Consulting</span><span class="proj-tool">Apple</span><span class="proj-tool">WCAG</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d3" data-cats="saas"><div class="proj-n">09</div><div><div class="proj-tags"><span class="tag">SaaS</span><span class="tag">Feature Discovery</span></div><div class="proj-title">TaskEzy</div><p class="proj-subtitle">Designing for Expansion: A Case Study on Increasing SaaS Revenue through Feature Discovery</p><p class="proj-desc">Audited user flows and redesigned the navigation and feature discovery experience of a task management SaaS to reduce friction and surface high-value features earlier in the user journey.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Business Analysis</span><span class="proj-tool">Mentoring</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d4" data-cats="saas"><div class="proj-n">10</div><div><div class="proj-tags"><span class="tag">SaaS</span><span class="tag">Design Systems</span></div><div class="proj-title">Smooven</div><p class="proj-subtitle">Designing for Efficiency: How I Simplified Complex Workflows for a Market-Ready SaaS</p><p class="proj-desc">Rebuilt the information architecture and component library of a B2B workflow SaaS, dramatically reducing task completion time and aligning the product with market expectations.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Design Systems</span><span class="proj-tool">Angular Fuse</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r" data-cats="mobile"><div class="proj-n">11</div><div><div class="proj-tags"><span class="tag">tvOS</span><span class="tag">Mobile</span><span class="tag">Startup</span></div><div class="proj-title">DreamSlip</div><p class="proj-subtitle">From Mobile to the Big Screen: Scaling a Startup's Reach with High-Impact tvOS UX</p><p class="proj-desc">Extended a startup's product from mobile to Apple TV, adapting the entire interaction model for a 10-foot UI while preserving brand identity and content hierarchy.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Leadership</span><span class="proj-tool">Apple</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d1" data-cats="brand"><div class="proj-n">12</div><div><div class="proj-tags"><span class="tag">Marketing</span><span class="tag">Ad Creative</span></div><div class="proj-title">Marketing Materials</div><p class="proj-subtitle">Visuals that Convert: How Data-Driven Ad Creative Boosted App Installs by 50%</p><p class="proj-desc">Designed a suite of performance marketing creatives — static and animated — informed by A/B test data and platform-specific best practices to maximise install rates.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Video Editing</span><span class="proj-tool">Canva</span><span class="proj-tool">Gemini</span></div><div class="proj-metric">↑ 50% app installs</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d2" data-cats="saas brand"><div class="proj-n">13</div><div><div class="proj-tags"><span class="tag">Web</span><span class="tag">Branding</span></div><div class="proj-title">Company Website</div><p class="proj-subtitle">The Founder Magnet: How a Strategic Redesign Doubled Startup Applications in 3 Months</p><p class="proj-desc">Redesigned a startup accelerator's company website with a sharper brand narrative and cleaner application funnel — doubling the number of qualified founder applications.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Scalable Design</span><span class="proj-tool">Mobirise</span></div><div class="proj-metric">↑ 2× startup applications</div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+  </div>
+
+  <div class="proj-section-label" id="lbl-personal">Personal Projects — 2 Projects</div>
+  <div class="proj-list" id="list-personal">
+    <div class="proj-row r" data-cats="brand"><div class="proj-n">14</div><div><div class="proj-tags"><span class="tag">Branding</span><span class="tag">Personal</span></div><div class="proj-title">Brand Essence</div><p class="proj-subtitle">Strategic Storytelling: How a UX-Led Branding Site Boosted Professional Credibility and Engagement</p><p class="proj-desc">Designed and built a personal branding website that communicates a clear design philosophy, showcases work effectively, and has measurably increased inbound opportunities.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">Wix</span><span class="proj-tool">Wix Studio</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+
+    <div class="proj-row r d1" data-cats="mobile"><div class="proj-n">15</div><div><div class="proj-tags"><span class="tag">Non-Profit</span><span class="tag">Mobile</span><span class="tag">Volunteering</span></div><div class="proj-title">Code4Romania</div><p class="proj-subtitle">UX for Good: Scaling a Non-Profit's Mission Through Intuitive Mobile Design</p><p class="proj-desc">Volunteered UX design for a civic-tech non-profit, creating mobile interfaces that made critical public services more accessible to Romanian citizens regardless of digital literacy.</p><div class="proj-tools"><span class="proj-tool">Figma</span><span class="proj-tool">UX Research</span><span class="proj-tool">Volunteering</span></div></div><div class="proj-arr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+  </div>
+
+  <footer><div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div><nav class="footer-nav"><button onclick="navigate('home')">Home</button><button onclick="navigate('about')">About Me</button><button onclick="navigate('contact')">Contact</button></nav></footer>
+</div>
+
+<!-- ══════════════════════════ PAGE: PROJECT DETAIL ══════════════════════════ -->
+<div class="page" id="page-project">
+  <div class="pd-back">
+    <button class="pd-back-btn" id="pd-back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to work
+    </button>
+  </div>
+  <div class="pd-hero">
+    <span class="pd-num" id="pd-num"></span>
+    <div class="pd-hero-tags" id="pd-hero-tags"></div>
+    <h1 class="pd-title" id="pd-title"></h1>
+    <p class="pd-subtitle" id="pd-subtitle"></p>
+    <div class="pd-metric" id="pd-metric"></div>
+    <div class="pd-tools-row" id="pd-tools"></div>
+  </div>
+  <div class="pd-body">
+    <div>
+      <div class="pd-section">
+        <div class="pd-section-label">Overview</div>
+        <p class="pd-text" id="pd-overview"></p>
+      </div>
+      <div class="pd-section">
+        <div class="pd-section-label">The Challenge</div>
+        <p class="pd-text" id="pd-challenge"></p>
+      </div>
+    </div>
+    <div>
+      <div class="pd-section">
+        <div class="pd-section-label">My Approach</div>
+        <p class="pd-text" id="pd-approach"></p>
+      </div>
+      <div class="pd-section">
+        <div class="pd-section-label">Outcome</div>
+        <p class="pd-text" id="pd-outcome"></p>
+      </div>
+    </div>
+  </div>
+  <div class="pd-gallery" id="pd-gallery"></div>
+
+  <div class="pd-nav">
+    <button class="pd-nav-btn" id="pd-prev-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Previous
+    </button>
+    <button class="pd-nav-btn accent" id="pd-next-btn">
+      Next project
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+  <footer><div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div><nav class="footer-nav"><button onclick="navigate('home')">Home</button><button onclick="navigate('portfolio')">Portfolio</button><button onclick="navigate('contact')">Contact</button></nav></footer>
+</div>
+
+<!-- ══════════════════════════ PAGE: ABOUT ══════════════════════════ -->
+<div class="page" id="page-about">
+
+  <div class="about-pg-top">
+    <div class="about-photo-col r">
+      <img src="images/about.jpg" alt="Laura Comanac — UX/UI Designer" />
+    </div>
+    <div>
+      <h1 class="about-pg-title r">About <em>Me</em></h1>
+      <p class="about-pg-lead r d1">"I bridge the gap between <strong>business goals</strong> and <strong>human needs</strong>. As a UX/UI Lead, I transform complex challenges into intuitive cross-platform experiences that users love and clients trust."</p>
+    </div>
+    <div class="r d2">
+      <div class="about-detail"><span class="about-detail-label">Currently</span><span class="about-detail-val"><strong>UX/UI Designer</strong> at Namadgi + Freelance</span></div>
+      <div class="about-detail"><span class="about-detail-label">Background</span><span class="about-detail-val">Frontend dev turned full-stack designer</span></div>
+      <div class="about-detail"><span class="about-detail-label">Education</span><span class="about-detail-val">MSc Software Engineering, Babeș-Bolyai University</span></div>
+      <div class="about-detail"><span class="about-detail-label">Tools</span><span class="about-detail-val">Figma, Framer, HTML, Tailwind CSS, Adobe Suite</span></div>
+      <div class="about-detail"><span class="about-detail-label">Interests</span><span class="about-detail-val">Art, Travelling, Wellness</span></div>
+    </div>
+  </div>
+
+  <div class="timeline-wrap">
+    <div class="s-label r">Experience</div>
+    <h2 class="s-title r d1">Building at the intersection<br>of design &amp; technology</h2>
+    <div class="timeline">
+      <div class="tl-item r d1">
+        <div class="tl-dot now"></div>
+        <div class="tl-date">Sept 2024 – Present</div>
+        <div class="tl-role">UX/UI Designer</div>
+        <div class="tl-company">Namadgi</div>
+        <p class="tl-desc">Leading UX/UI design for cross-platform digital products. Specialising in AI workflows, design systems, and scalable product experiences across web and mobile — with a strong focus on bridging design and engineering.</p>
+      </div>
+      <div class="tl-item r d2">
+        <div class="tl-dot now"></div>
+        <div class="tl-date">May 2024 – Present</div>
+        <div class="tl-role">UX/UI Designer</div>
+        <div class="tl-company">Freelance</div>
+        <p class="tl-desc">Independent consulting for startups and scale-ups. End-to-end design from strategy and research through high-fidelity prototyping and developer handoff — spanning SaaS, mobile, and branding projects.</p>
+      </div>
+      <div class="tl-item r d3">
+        <div class="tl-dot"></div>
+        <div class="tl-date">Feb 2024 – May 2024</div>
+        <div class="tl-role">Frontend Developer</div>
+        <div class="tl-company">Generali</div>
+        <p class="tl-desc">Developed responsive, accessible frontend interfaces for insurance platform products. Bridged the gap between design specs and production code, working closely with both UX designers and backend engineers.</p>
+      </div>
+      <div class="tl-item r d4">
+        <div class="tl-dot"></div>
+        <div class="tl-date">Jul 2023 – Dec 2023</div>
+        <div class="tl-role">Frontend Engineer</div>
+        <div class="tl-company">Bosch</div>
+        <p class="tl-desc">Built and maintained B2B software interfaces following Material Design guidelines on enterprise-grade products. Collaborated with cross-functional teams across multiple time zones using Angular Fuse.</p>
+      </div>
+      <div class="tl-item r">
+        <div class="tl-dot"></div>
+        <div class="tl-date">Jul 2022 – Jul 2023</div>
+        <div class="tl-role">Software Developer</div>
+        <div class="tl-company">UiPath</div>
+        <p class="tl-desc">Developed features for RPA (Robotic Process Automation) platform interfaces. Contributed to UI components and front-end architecture in a fast-paced scale-up environment, gaining deep exposure to complex enterprise UX challenges.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-wrap no-top">
+    <div class="s-label r">Education</div>
+    <h2 class="s-title r d1">Academic background</h2>
+    <div class="edu-grid">
+      <div class="edu-card r d1">
+        <div class="edu-degree">Master's Degree in Software Engineering</div>
+        <div class="edu-school">Babeș-Bolyai University</div>
+        <div class="edu-period">Jul 2022 – Jul 2024</div>
+      </div>
+      <div class="edu-card r d2">
+        <div class="edu-degree">Bachelor's Degree in Computer Science</div>
+        <div class="edu-school">Babeș-Bolyai University</div>
+        <div class="edu-period">Jul 2019 – Jul 2022</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="skills-wrap">
+    <div class="s-label r">Skills &amp; Tools</div>
+    <h2 class="s-title r d1">What I bring to the table</h2>
+    <div class="skills-grid">
+      <div class="r d1">
+        <div class="skill-cat-title">Design Skills</div>
+        <div class="skill-pills">
+          <span class="skill-pill">UX Research</span>
+          <span class="skill-pill">Wireframing</span>
+          <span class="skill-pill">Prototyping</span>
+          <span class="skill-pill">UI Design</span>
+          <span class="skill-pill">Design Systems</span>
+          <span class="skill-pill">Information Architecture</span>
+          <span class="skill-pill">Usability Testing</span>
+          <span class="skill-pill">Accessibility (WCAG)</span>
+          <span class="skill-pill">Competitive Analysis</span>
+          <span class="skill-pill">Agile Methodology</span>
+          <span class="skill-pill">Design Leadership</span>
+          <span class="skill-pill">User Flows</span>
+        </div>
+      </div>
+      <div class="r d2">
+        <div class="skill-cat-title">Tools &amp; Platforms</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Figma</span>
+          <span class="skill-pill">Framer</span>
+          <span class="skill-pill">Adobe Suite</span>
+          <span class="skill-pill">Material Design</span>
+          <span class="skill-pill">Angular Fuse</span>
+          <span class="skill-pill">HTML</span>
+          <span class="skill-pill">Tailwind CSS</span>
+          <span class="skill-pill">Figma Make</span>
+          <span class="skill-pill">Gemini</span>
+          <span class="skill-pill">Claude</span>
+          <span class="skill-pill">Meta Horizon</span>
+          <span class="skill-pill">Wix Studio</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="certs-wrap">
+    <div class="s-label r">Certifications</div>
+    <h2 class="s-title r d1">Continuous learning</h2>
+    <div class="cert-grid">
+      <div class="cert-card r d1">
+        <svg class="cert-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15l-2 5-1-1-5 1 1-5-1-1 5-2 3 3zM12 3a9 9 0 110 18"/></svg>
+        <div class="cert-name">Human-Computer Interaction</div>
+      </div>
+      <div class="cert-card r d2">
+        <svg class="cert-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22a10 10 0 100-20 10 10 0 000 20zM2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <div class="cert-name">Adaptive Web Design &amp; Accessibility</div>
+      </div>
+      <div class="cert-card r d3">
+        <svg class="cert-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <div class="cert-name">User Experience (UX) Design</div>
+      </div>
+      <div class="cert-card r d4">
+        <svg class="cert-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        <div class="cert-name">Coursera UX Design Thinking</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="interests-wrap">
+    <div class="s-label r">Beyond Work</div>
+    <div class="interest-row">
+      <div class="interest-pill r d1"><svg class="interest-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Art</div>
+      <div class="interest-pill r d2"><svg class="interest-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0zM12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>Travelling</div>
+      <div class="interest-pill r d3"><svg class="interest-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Wellness</div>
+    </div>
+  </div>
+
+  <footer><div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div><nav class="footer-nav"><button onclick="navigate('home')">Home</button><button onclick="navigate('portfolio')">Portfolio</button><button onclick="navigate('contact')">Contact</button></nav></footer>
+</div>
+
+<!-- ══════════════════════════ PAGE: CONTACT ══════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-pg">
+    <div class="contact-left">
+      <div class="contact-glow"></div>
+      <p class="contact-eye r">Open to new projects</p>
+      <h2 class="contact-h r d1">Let's work<br><em>together</em></h2>
+      <p class="contact-sub r d2">Whether you have a product that needs a design overhaul or a bold new idea that needs to come to life — I'd love to hear about it.</p>
+      <a href="mailto:laura.elena.comanac@namadgi.com" class="contact-email-link r d3">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        laura.elena.comanac@namadgi.com
+      </a>
+    </div>
+    <div class="contact-right r d2">
+      <div class="form-title">Send a message</div>
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name" required></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="your@email.com" required></div>
+        </div>
+        <div class="form-group"><label class="form-label">Project type</label><input type="text" class="form-input" placeholder="UX Design / Product Strategy / Consulting…"></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Tell me about your project…" required></textarea></div>
+        <button type="submit" class="btn btn-primary">Send message <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </form>
+      <div id="formSuccess" class="form-success">
+        <div class="form-success-icon">✓</div>
+        <h3>Message sent!</h3>
+        <p>Thanks for reaching out — I'll be in touch soon.</p>
+      </div>
+    </div>
+  </div>
+  <footer><div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div><nav class="footer-nav"><button onclick="navigate('home')">Home</button><button onclick="navigate('portfolio')">Portfolio</button><button onclick="navigate('about')">About Me</button></nav></footer>
+</div>
+
+<script>
+  // ── CURSOR ─────────────────────────────────────────────
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+  (function loop() { rx += (mx-rx)*.1; ry += (my-ry)*.1; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(loop); })();
+
+  function initHovers() {
+    document.querySelectorAll('a,button,.proj-row,.testi-card,.srv-cell,.edu-card,.cert-card,.interest-pill,.filter-btn,.skill-pill').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('c-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('c-hover'));
+    });
+  }
+
+  // ── PRELOADER ──────────────────────────────────────────
+  window.addEventListener('load', () => setTimeout(() => document.getElementById('preloader').classList.add('out'), 1400));
+
+  // ── NAV SCROLL STATE ───────────────────────────────────
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('stuck', window.scrollY > 60), { passive: true });
+
+  // ── PAGE ROUTING ───────────────────────────────────────
+  function navigate(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const pg = document.getElementById('page-' + id);
+    if (!pg) return;
+    pg.classList.add('active');
+    window.scrollTo({ top: 0 });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('is-active'));
+    document.querySelectorAll('[data-page="' + id + '"]').forEach(l => l.classList.add('is-active'));
+    requestAnimationFrame(() => requestAnimationFrame(() => initReveal()));
+    initHovers();
+  }
+
+  // ── SCROLL REVEAL ──────────────────────────────────────
+  let rio;
+  function initReveal() {
+    if (rio) rio.disconnect();
+    rio = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
+    }, { threshold: 0 });
+    document.querySelectorAll('.page.active .r:not(.in)').forEach(el => rio.observe(el));
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => initReveal()));
+
+  // ── COUNTERS ───────────────────────────────────────────
+  const cio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target, to = +el.dataset.to, start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start) / 1600, 1);
+        el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * to);
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+      cio.unobserve(el);
+    });
+  }, { threshold: .6 });
+  document.querySelectorAll('.cnt').forEach(el => cio.observe(el));
+
+  // ── MAGNETIC BUTTONS ───────────────────────────────────
+  document.querySelectorAll('.btn-primary,.btn-outline').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      btn.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.14}px,${(e.clientY-r.top-r.height/2)*.14-3}px)`;
+    });
+    btn.addEventListener('mouseleave', () => btn.style.transform = '');
+  });
+
+  // ── PORTFOLIO FILTER ───────────────────────────────────
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('#page-portfolio .proj-row').forEach(row => {
+        row.classList.toggle('hidden', cat !== 'all' && !(row.dataset.cats || '').includes(cat));
+      });
+      ['client','personal'].forEach(grp => {
+        const lbl = document.getElementById('lbl-' + grp);
+        const lst = document.getElementById('list-' + grp);
+        if (!lbl || !lst) return;
+        const hasVisible = lst.querySelectorAll('.proj-row:not(.hidden)').length > 0;
+        lbl.classList.toggle('hidden', !hasVisible);
+        lst.classList.toggle('hidden', !hasVisible);
+      });
+    });
+  });
+
+  // ── HERO SPOTLIGHT ─────────────────────────────────────
+  const heroSection = document.getElementById('hero');
+  const heroSpans = document.querySelectorAll('.hero-h1 .line span');
+  heroSection.addEventListener('mousemove', e => {
+    heroSpans.forEach(span => {
+      const r = span.getBoundingClientRect();
+      span.classList.add('spotlight');
+      span.style.backgroundImage = `radial-gradient(circle 180px at ${e.clientX-r.left}px ${e.clientY-r.top}px,#9B5DE5 0%,#9B5DE5 20%,#F0EDE7 62%)`;
+    });
+  });
+  heroSection.addEventListener('mouseleave', () => {
+    heroSpans.forEach(span => { span.classList.remove('spotlight'); span.style.backgroundImage = ''; });
+  });
+  setTimeout(() => document.querySelector('.hero-h1')?.classList.add('no-anim'), 2500);
+
+  // ── CONTACT FORM ───────────────────────────────────────
+  document.getElementById('contactForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  });
+
+  // ── PROJECT DATA ───────────────────────────────────────
+  const PD = {
+    '01':{ title:'Biometry', subtitle:'Scaling AI with Biometrics: How I Reduced Onboarding Friction for a SaaS MVP', tags:['SaaS','AI','Onboarding'], tools:['Figma','Angular Fuse','WCAG'], metric:null,
+      overview:'Designed the complete onboarding journey for a B2B SaaS platform powered by AI biometric authentication — making a technically complex setup process feel effortless for non-technical first-time users.',
+      challenge:'The existing flow had a steep drop-off rate in the first few steps. Users were confused by technical jargon, unclear progress states, and a lack of contextual feedback. Support teams were flooded with setup-related tickets.',
+      approach:'Ran 8 user interviews and a full UX audit to map failure points. Redesigned the architecture as a guided 3-step wizard with contextual tooltips, real-time visual feedback, and plain-language copy. Prototyped and iterated with 3 rounds of usability testing.',
+      outcome:'Onboarding completion rates improved significantly. Setup-related support tickets dropped and the new flow became the template for all subsequent feature releases.',
+      images:[{s:'p01-1.png',r:'land'},{s:'p01-2.png',r:'land'},{s:'p01-3.png',r:'land'},{s:'p01-4.jpg',r:'sq'},{s:'p01-5.jpg',r:'sq'},{s:'p01-6.jpg',r:'sq'}] },
+    '02':{ title:'Biometry Bank', subtitle:'Securing Success: How Biometric UX Cut Login Friction by 50% for a Global Bank', tags:['B2B','Banking','Biometrics'], tools:['Figma','Gemini','Material','WCAG'], metric:'↓ 50% login friction',
+      overview:'Redesigned the enterprise authentication experience for a global banking platform — replacing a cumbersome multi-step password flow with seamless biometric login for thousands of daily B2B users.',
+      challenge:'The legacy system averaged 45 seconds per login with a high session failure rate. Enterprise security requirements created real tension with usability targets, and accessibility was an afterthought in the original design.',
+      approach:'Mapped the authentication journey across 6 user personas and 4 device scenarios. Designed a progressive fallback system putting biometrics first while handling edge cases gracefully — in close collaboration with security engineers.',
+      outcome:'Login time dropped by over 50%. Session failures fell sharply and the system rolled out successfully across 12 countries with zero critical post-launch incidents.',
+      images:[{s:'p02-1.png',r:'land'},{s:'p02-2.png',r:'land'}] },
+    '03':{ title:'Mobile Games', subtitle:'From Prototype to Powerhouse: Engineering Game Economies for Long-Term Scalability', tags:['Mobile','Gaming','Economy'], tools:['Figma Make','Lovable','Claude','AntiGravity'], metric:null,
+      overview:'Designed UX systems governing in-app purchase flows and progression mechanics for a mobile game portfolio — balancing player engagement with sustainable monetisation at scale.',
+      challenge:'Existing purchase flows felt abrupt and transactional. Retention dropped after the initial free experience and conversion from free to paying users was well below industry benchmarks.',
+      approach:'Analysed top-grossing mobile games and mapped player motivation models against existing purchase triggers. Redesigned the economy around natural progression milestones with social proof, value-stacking, and soft-gate mechanics that felt rewarding rather than coercive.',
+      outcome:'In-app purchase conversion improved and the redesigned progression system supported long-term player retention — building an economy designed to scale with the game catalogue.',
+      images:[{s:'p03-1.png',r:'land'},{s:'p03-2.png',r:'land'}] },
+    '04':{ title:'Presentation Website', subtitle:'From Pitch to Profit: Designing a High-Conversion Website to Scale Startup Growth', tags:['Web','Startup','Conversion'], tools:['Figma','Framer','Gemini'], metric:null,
+      overview:'Crafted the primary web presence for a high-growth startup — designing a site that communicates the value proposition clearly, builds trust rapidly, and converts visitors into qualified leads.',
+      challenge:'The previous site had a high bounce rate and weak lead conversion. Visitors couldn\'t quickly understand what the product did. The design lacked the visual hierarchy and credibility signals that investors and enterprise buyers expect.',
+      approach:'Started with a messaging workshop to clarify the core value proposition and audiences. Applied conversion-focused information architecture with clear above-fold messaging, strategic social proof placement, and a streamlined CTA flow. Built in Framer for rapid iteration.',
+      outcome:'The new site became the primary channel for inbound leads and investor outreach, directly supporting the company\'s fundraising round and market expansion.',
+      images:[{s:'p04-1.png',r:'land'},{s:'p04-2.png',r:'land'},{s:'p04-3.png',r:'land'}] },
+    '05':{ title:'Ascent', subtitle:'Monetizing the Beat: Driving a 25% Increase in In-App Purchases through Social UX', tags:['Mobile App','Social UX','Monetisation'], tools:['Figma','Leadership','Apple','WCAG'], metric:'↑ 25% in-app purchases',
+      overview:'Redesigned the community and progression features of a music-focused mobile app to create natural, high-intent moments for in-app purchases — without disrupting the core experience.',
+      challenge:'Monetisation felt bolted-on. Users enjoyed the free experience but had little motivation to upgrade. Social features were underdeveloped, meaning the network effects that drive retention and purchase intent weren\'t being activated.',
+      approach:'Ran a motivational UX audit to identify moments of pride and social connection, then redesigned those touchpoints to surface relevant upgrade offers contextually. Rebuilt the social feed and profile systems to amplify status and belonging as purchase motivators.',
+      outcome:'In-app purchases increased by 25% quarter-over-quarter. Session length grew and social features became the top-rated aspect in App Store reviews.',
+      images:[{s:'p05-1.png',r:'land'},{s:'p05-6.png',r:'land'},{s:'p05-3.png',r:'port'},{s:'p05-4.png',r:'port'},{s:'p05-5.png',r:'port'},{s:'p05-2.png',r:'port'},{s:'p05-7.png',r:'doc'},{s:'p05-8.png',r:'doc'},{s:'p05-9.png',r:'doc'},{s:'p05-10.png',r:'doc'},{s:'p05-11.png',r:'doc'}] },
+    '06':{ title:'DreamSlip Ads', subtitle:'Niche Ad Tech UX: Capturing the Market Through User-Centric Design', tags:['Ad Tech','Marketing'], tools:['Figma','Leadership','Material','WCAG'], metric:null,
+      overview:'Designed the UX for a niche ad-tech platform — turning a complex campaign management and targeting system into an interface that non-technical advertisers could navigate with confidence.',
+      challenge:'The platform\'s powerful targeting capabilities were buried behind a developer-oriented UI. Non-technical advertisers — the actual target market — abandoned the product after the first session, unable to launch their first campaign without hand-holding.',
+      approach:'Conducted contextual inquiry sessions with 6 users across different experience levels. Restructured the campaign creation flow as a guided journey with progressive disclosure, smart defaults, and inline explanations. Applied Material Design for accessibility and consistency.',
+      outcome:'Time-to-first-campaign dropped significantly and churn among non-technical users improved — opening the product to a much broader addressable market.',
+      images:[{s:'p06-1.png',r:'land'},{s:'p06-2.png',r:'port'}] },
+    '07':{ title:'VR Worlds', subtitle:'The Immersive Edge: Why Moving from Mobile to VR Doubled User Retention', tags:['VR/AR','Immersive'], tools:['Figma','XR/VR/AR','Meta Horizon'], metric:'↑ 2× user retention',
+      overview:'Led the UX design for a mobile product\'s transition into a fully immersive VR experience on Meta Horizon — defining spatial interaction patterns, comfort guidelines, and first-time user onboarding.',
+      challenge:'Mobile UX conventions don\'t translate to VR. The team had deep mobile expertise but no VR design playbook. Comfort, disorientation, and discoverability in 3D space were entirely new problem areas with no margin for error.',
+      approach:'Immersed in VR design research and conducted hands-on prototype testing with real users in headsets. Established a spatial design system with comfort-first interaction guidelines, locomotion patterns, and accessible UI placements.',
+      outcome:'User retention doubled in the first month post-launch. The spatial design system was adopted as the foundation for all future VR feature development.',
+      images:[{s:'p07-1.png',r:'land'},{s:'p07-2.png',r:'land'},{s:'p07-3.png',r:'land'},{s:'p07-4.png',r:'land'}] },
+    '08':{ title:'Selfiebot', subtitle:'Tech for Everyone: Designing an Intuitive Interface that Eliminated Support Tickets', tags:['Hardware UX','Accessibility'], tools:['Figma','Consulting','Apple','WCAG'], metric:null,
+      overview:'Designed the touchscreen interface for a self-service kiosk product — prioritising accessibility and zero-learning-curve interactions for a diverse user base including elderly and non-technical users.',
+      challenge:'The original interface generated constant on-site support requests. Users over 50 and those unfamiliar with touchscreen technology were particularly frustrated, creating operational overhead at high-traffic venues.',
+      approach:'Conducted field observation sessions at deployment locations. Redesigned every interaction around a single clear action per screen, large tap targets, and immediate visual and audio feedback. Applied WCAG 2.1 AA standards throughout with broad user testing.',
+      outcome:'Support tickets related to interface confusion were eliminated within 2 months of relaunch. User satisfaction scores at kiosk locations improved measurably.',
+      images:[{s:'p08-1.png',r:'port'},{s:'p08-2.png',r:'port'}] },
+    '09':{ title:'TaskEzy', subtitle:'Designing for Expansion: A Case Study on Increasing SaaS Revenue through Feature Discovery', tags:['SaaS','Feature Discovery'], tools:['Figma','Business Analysis','Mentoring'], metric:null,
+      overview:'Audited and redesigned the navigation and feature discovery experience of a task management SaaS to surface high-value features earlier and accelerate the path to paid conversion.',
+      challenge:'Power features users loved were buried 4–5 clicks deep. The free-to-paid conversion funnel was leaking at the \'aha moment\' stage — users weren\'t discovering the features that would justify upgrading.',
+      approach:'Ran a full heuristic evaluation and analysed in-app behaviour data to map the discovery gap. Redesigned navigation architecture with contextual nudges, in-product tooltips, and a revamped onboarding checklist guiding users to value faster.',
+      outcome:'Feature discovery depth improved and free-to-paid conversion increased as users reached key value moments earlier in their journey.',
+      images:[{s:'p09-1.png',r:'land'},{s:'p09-2.png',r:'land'}] },
+    '10':{ title:'Smooven', subtitle:'Designing for Efficiency: How I Simplified Complex Workflows for a Market-Ready SaaS', tags:['SaaS','Design Systems'], tools:['Figma','Design Systems','Angular Fuse'], metric:null,
+      overview:'Rebuilt the information architecture and component library of a B2B workflow SaaS — dramatically reducing task completion time and positioning the product for a competitive market launch.',
+      challenge:'The product had evolved organically, accumulating inconsistent flows and an out-of-control component library. New users required weeks of onboarding. The design debt was blocking engineering and slowing feature velocity.',
+      approach:'Led a complete design system rebuild — consolidating 140+ components into a coherent documented library with Angular Fuse guidelines. Restructured core workflows using card-sorting and tree-testing sessions with real users.',
+      outcome:'Task completion time for core workflows dropped significantly. New user onboarding reduced from weeks to days and design-to-dev handoff time cut by over 40%.',
+      images:[{s:'p10-1.png',r:'land'},{s:'p10-3.png',r:'land'},{s:'p10-2.png',r:'land'}] },
+    '11':{ title:'DreamSlip', subtitle:'From Mobile to the Big Screen: Scaling a Startup\'s Reach with High-Impact tvOS UX', tags:['tvOS','Mobile','Startup'], tools:['Figma','Leadership','Apple'], metric:null,
+      overview:'Extended a startup\'s mobile product to Apple TV — adapting the entire interaction model for a 10-foot UI experience while preserving brand identity and content hierarchy.',
+      challenge:'tvOS presents fundamentally different constraints: focus-based navigation with a remote, no direct touch, and a primary viewing distance of 10+ feet. Mobile mental models, component sizes, and navigation patterns simply didn\'t work on the big screen.',
+      approach:'Deep-dived into Apple\'s tvOS Human Interface Guidelines and analysed leading streaming apps. Redesigned every navigation pattern for the focus engine, rebuilt visual hierarchy for 10-foot legibility, and created a new onboarding flow for users coming from mobile.',
+      outcome:'The tvOS app launched successfully and expanded the product\'s reach to a new living-room user segment, supporting the startup\'s multi-platform growth strategy.',
+      images:[{s:'p11-1.png',r:'land'},{s:'p11-2.png',r:'land'}] },
+    '12':{ title:'Marketing Materials', subtitle:'Visuals that Convert: How Data-Driven Ad Creative Boosted App Installs by 50%', tags:['Marketing','Ad Creative'], tools:['Figma','Video Editing','Canva','Gemini'], metric:'↑ 50% app installs',
+      overview:'Designed a suite of performance marketing creatives — static and animated — informed by A/B test data and platform best practices to maximise app install rates across paid channels.',
+      challenge:'Existing ad creative was brand-consistent but not performance-optimised. CTRs were below benchmark and the small creative library caused rapid fatigue and rising CPIs.',
+      approach:'Audited creative performance data to identify resonant messaging, visual styles, and formats. Designed a systematic testing framework — 3 concepts × 4 format variants × 2 copy angles — covering static, carousels, and short-form video.',
+      outcome:'App installs increased by 50% within the first campaign cycle. The creative testing framework became the standard process for all future performance marketing.',
+      images:[{s:'p12-1.png',r:'port'},{s:'p12-6.png',r:'port'},{s:'p12-2.png',r:'port'},{s:'p12-3.png',r:'port'},{s:'p12-4.png',r:'port'},{s:'p12-5.png',r:'port'}] },
+    '13':{ title:'Company Website', subtitle:'The Founder Magnet: How a Strategic Redesign Doubled Startup Applications in 3 Months', tags:['Web','Branding'], tools:['Figma','Scalable Design','Mobirise'], metric:'↑ 2× startup applications',
+      overview:'Redesigned a startup accelerator\'s website with a sharper brand narrative and cleaner application funnel — doubling the volume of qualified founder applications in under 3 months.',
+      challenge:'The site\'s positioning was vague and the application flow was buried. Time-poor early-stage founders couldn\'t quickly understand the programme\'s value or trust its credibility. The brand felt dated versus competing accelerators.',
+      approach:'Reframed the brand narrative around founder outcomes rather than programme features. Restructured the page hierarchy to lead with social proof and clear value propositions, then a streamlined application entry point.',
+      outcome:'Applications doubled within 3 months. The quality of applicants also improved, with a higher percentage meeting programme criteria — attributed to clearer messaging attracting better-fit founders.',
+      images:[{s:'p13-1.png',r:'land'},{s:'p13-2.png',r:'land'}] },
+    '14':{ title:'Brand Essence', subtitle:'Strategic Storytelling: How a UX-Led Branding Site Boosted Professional Credibility and Engagement', tags:['Branding','Personal'], tools:['Figma','Wix','Wix Studio'], metric:null,
+      overview:'Designed and built a personal branding website that communicates a distinct design philosophy, showcases work strategically, and has measurably increased professional visibility and inbound opportunities.',
+      challenge:'Most designer portfolios look identical — a grid of thumbnails with little personality. The goal was to create a digital presence that felt as considered as the work it showcased and told a compelling professional story from the first scroll.',
+      approach:'Started with a personal brand strategy to define voice, positioning, and audience. Designed a content architecture leading with outcomes and thinking over deliverables. Focused on copy as much as visual design, then built for rapid iteration in Wix Studio.',
+      outcome:'Professional engagement increased significantly post-launch. The site has been cited directly by collaborators and clients as a key factor in their decision to reach out.',
+      images:[{s:'p14-4.png',r:'land'},{s:'p14-1.png',r:'land'},{s:'p14-2.png',r:'land'},{s:'p14-3.png',r:'land'}] },
+    '15':{ title:'Code4Romania', subtitle:'UX for Good: Scaling a Non-Profit\'s Mission Through Intuitive Mobile Design', tags:['Non-Profit','Mobile','Volunteering'], tools:['Figma','UX Research','Volunteering'], metric:null,
+      overview:'Volunteered UX design for a civic-tech non-profit — creating mobile interfaces that made critical public services more accessible to Romanian citizens across all digital literacy levels.',
+      challenge:'The existing app required a level of digital fluency that excluded a large portion of its intended users — elderly citizens and people in low-connectivity rural areas who most needed the services. The interface was dense and the language was bureaucratic.',
+      approach:'Ran guerrilla testing sessions with target users on zero budget. Simplified every flow to its minimum viable steps, rewrote all copy in plain language, and designed an offline-first interaction model for low-connectivity scenarios.',
+      outcome:'The redesigned app reached more citizens in its first month post-launch than the previous version had in six months. The project was highlighted in the non-profit\'s annual impact report.',
+      images:[{s:'p15-1.png',r:'port'},{s:'p15-2.png',r:'port'}] }
+  };
+
+  const projOrder = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15'];
+  let currentProj = '01';
+
+  function openProject(id, fromPage) {
+    const p = PD[id]; if (!p) return;
+    currentProj = id;
+    const idx = projOrder.indexOf(id);
+
+    document.getElementById('pd-num').textContent = id + ' / 15';
+    document.getElementById('pd-title').textContent = p.title;
+    document.getElementById('pd-subtitle').textContent = p.subtitle;
+
+    const tagsEl = document.getElementById('pd-hero-tags');
+    tagsEl.innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    const metricEl = document.getElementById('pd-metric');
+    if (p.metric) { metricEl.textContent = p.metric; metricEl.style.display = 'inline-flex'; }
+    else { metricEl.style.display = 'none'; }
+
+    document.getElementById('pd-tools').innerHTML = p.tools.map(t => `<span class="pd-tool">${t}</span>`).join('');
+    document.getElementById('pd-overview').textContent = p.overview;
+    document.getElementById('pd-challenge').textContent = p.challenge;
+    document.getElementById('pd-approach').textContent = p.approach;
+    document.getElementById('pd-outcome').textContent = p.outcome;
+
+    // Back button remembers where we came from
+    document.getElementById('pd-back-btn').onclick = () => navigate(fromPage || 'portfolio');
+
+    // Next / Prev
+    const nextId = projOrder[(idx + 1) % projOrder.length];
+    const prevId = projOrder[(idx - 1 + projOrder.length) % projOrder.length];
+    document.getElementById('pd-next-btn').onclick = () => openProject(nextId, fromPage);
+    document.getElementById('pd-prev-btn').textContent = '';
+    document.getElementById('pd-prev-btn').innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> ${PD[prevId].title}`;
+    document.getElementById('pd-prev-btn').onclick = () => openProject(prevId, fromPage);
+
+    // Gallery
+    const galleryEl = document.getElementById('pd-gallery');
+    if (p.images && p.images.length) {
+      galleryEl.style.display = '';
+      galleryEl.innerHTML = `<div class="pd-gallery-label">Selected screens</div><div class="pd-gallery-grid">${p.images.map(img=>`<div class="pd-gallery-item ${img.r||'land'}"><img src="images/${img.s}" alt="${p.title}" loading="lazy"></div>`).join('')}</div>`;
+    } else {
+      galleryEl.style.display = 'none';
+    }
+
+    navigate('project');
+  }
+
+  // Lightbox
+  const lb = document.getElementById('pd-lightbox');
+  const lbImg = document.getElementById('pd-lightbox-img');
+  document.addEventListener('click', e => {
+    const item = e.target.closest('.pd-gallery-item');
+    if (item) { lbImg.src = item.querySelector('img').src; lb.classList.add('open'); return; }
+    if (e.target === lb || e.target === lbImg) lb.classList.remove('open');
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  // Make all project rows clickable
+  document.addEventListener('click', e => {
+    const row = e.target.closest('.proj-row');
+    if (!row) return;
+    const num = row.querySelector('.proj-n')?.textContent?.trim();
+    if (num && PD[num]) {
+      const fromPage = document.querySelector('.page.active')?.id?.replace('page-', '') || 'portfolio';
+      openProject(num, fromPage);
+    }
+  });
+  document.querySelectorAll('.proj-row').forEach(row => { row.style.cursor = 'pointer'; });
+
+  // ── INIT ───────────────────────────────────────────────
+  initHovers();
+  document.querySelectorAll('[data-page="home"]').forEach(l => l.classList.add('is-active'));
+</script>
+</body>
+</html>

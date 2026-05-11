@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laura Comanac — Freelance UX/UI Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#F8F5F0; --bg-2:#F1EDE6; --bg-3:#EAE4DC; --bg-4:#E2DBD0;
+      --text:#0D0B10; --text-dim:#6B6574; --text-muted:#B0AABB;
+      --accent:#9B5DE5; --accent-rgb:155,93,229;
+      --cyan:#06B6D4; --cyan-rgb:6,182,212;
+      --border:rgba(13,11,16,.09); --border-2:rgba(13,11,16,.16);
+      --ease-out:cubic-bezier(0.16,1,0.3,1); --ease-circ:cubic-bezier(0.76,0,0.24,1);
+      --font-head:'Space Grotesk',sans-serif; --font-display:'Comfortaa',cursive; --font-body:'DM Sans',sans-serif;
+      --max:1200px;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:16px; line-height:1.6; overflow-x:hidden; cursor:none; }
+    ::selection { background:rgba(var(--accent-rgb),.3); }
+    ::-webkit-scrollbar { width:2px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--accent); }
+    body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.025; pointer-events:none; z-index:9000; }
+
+    /* CURSOR */
+    #c-dot,#c-ring { position:fixed; pointer-events:none; border-radius:50%; transform:translate(-50%,-50%); z-index:9999; }
+    #c-dot { width:5px; height:5px; background:var(--text); transition:width .2s,height .2s,opacity .2s; }
+    #c-ring { width:32px; height:32px; border:1px solid rgba(13,11,16,.2); transition:width .4s var(--ease-out),height .4s var(--ease-out),border-color .3s,background .3s; }
+    body.c-h #c-dot { width:0; height:0; opacity:0; }
+    body.c-h #c-ring { width:56px; height:56px; border-color:var(--accent); background:rgba(var(--accent-rgb),.08); }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; padding:1.2rem clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; transition:background .5s,backdrop-filter .5s,border-color .5s; }
+    nav.stuck { background:rgba(248,245,240,.5); backdrop-filter:blur(28px) saturate(1.6); -webkit-backdrop-filter:blur(28px) saturate(1.6); border-bottom:1px solid rgba(13,11,16,.07); }
+    .nav-logo { color:var(--text); text-decoration:none; display:flex; align-items:center; gap:.8rem; transition:opacity .3s; }
+    .nav-logo:hover { opacity:.7; }
+    .logo-mark { flex-shrink:0; display:block; height:44px; width:auto; overflow:visible; }
+    .logo-first { font-family:var(--font-display); font-size:.95rem; font-weight:700; letter-spacing:-.03em; }
+    .logo-last  { font-family:var(--font-display); font-size:.95rem; font-weight:400; letter-spacing:-.02em; color:var(--text-dim); }
+    .nav-links { display:flex; align-items:center; gap:2.5rem; list-style:none; }
+    .nav-links a { font-size:.82rem; color:var(--text-dim); text-decoration:none; letter-spacing:.02em; transition:color .3s; }
+    .nav-links a:hover { color:var(--text); }
+    .nav-cta { font-family:var(--font-head); font-size:.82rem; font-weight:600; color:#fff; background:var(--accent); padding:.6rem 1.4rem; border-radius:100px; text-decoration:none; transition:background .3s,transform .3s var(--ease-out),box-shadow .3s; white-space:nowrap; }
+    .nav-cta:hover { background:#7C3DC0; transform:translateY(-2px); box-shadow:0 8px 28px rgba(var(--accent-rgb),.35); }
+
+    /* HERO */
+    .hero { min-height:100svh; display:flex; flex-direction:column; justify-content:center; padding:0 clamp(1.5rem,5vw,4rem); position:relative; overflow:hidden; }
+    .hero-glow { position:absolute; width:900px; height:900px; border-radius:50%; background:radial-gradient(circle,rgba(155,93,229,.1) 0%,transparent 70%); top:-200px; right:-200px; pointer-events:none; }
+    .hero-content { position:relative; z-index:2; margin:0 auto; text-align:center; }
+    .hero-badge { display:inline-flex; align-items:center; gap:.55rem; font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:2rem; }
+    .hero-badge::before { content:''; width:6px; height:6px; background:#22C55E; border-radius:50%; box-shadow:0 0 8px #22C55E; animation:pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.6)} }
+    .hero-h1 { font-family:var(--font-display); font-size:clamp(3rem,7.5vw,8.5rem); font-weight:700; letter-spacing:-.04em; line-height:1.12; margin-bottom:2rem; color:var(--text); }
+    .hero-h1 em { font-style:italic; font-weight:300; color:var(--text-muted); }
+    .hero-h1 .grad { background:linear-gradient(135deg,var(--accent),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-sub { font-size:clamp(.95rem,1.5vw,1.1rem); color:var(--text-dim); max-width:50ch; line-height:1.75; margin:0 auto 2.5rem; }
+    .hero-actions { display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+    .btn-primary { font-family:var(--font-head); font-size:.9rem; font-weight:600; color:#fff; background:var(--accent); padding:.9rem 2.2rem; border-radius:100px; text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:background .3s,transform .3s var(--ease-out),box-shadow .3s; }
+    .btn-primary:hover { background:#7C3DC0; transform:translateY(-3px); box-shadow:0 12px 32px rgba(var(--accent-rgb),.35); }
+    .btn-ghost { font-family:var(--font-head); font-size:.9rem; font-weight:500; color:var(--text-dim); text-decoration:none; display:inline-flex; align-items:center; gap:.4rem; transition:color .3s; }
+    .btn-ghost:hover { color:var(--text); }
+    .btn-ghost svg { transition:transform .3s var(--ease-out); }
+    .btn-ghost:hover svg { transform:translateX(4px); }
+
+    /* MARQUEE */
+    .marquee-section { padding:2.5rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); overflow:hidden; }
+    .marquee-track { display:flex; gap:3rem; animation:marquee 22s linear infinite; width:max-content; }
+    .marquee-track:hover { animation-play-state:paused; }
+    @keyframes marquee { to{transform:translateX(-50%)} }
+    .marquee-item { display:flex; align-items:center; gap:.6rem; font-family:var(--font-head); font-size:.8rem; font-weight:600; letter-spacing:.05em; color:var(--text-muted); white-space:nowrap; }
+    .marquee-dot { width:4px; height:4px; background:var(--accent); border-radius:50%; }
+
+    /* GRADIENT BG */
+    .grad-bg { background: linear-gradient(100deg, rgba(var(--accent-rgb),.16) 0%, rgba(var(--accent-rgb),.04) 38%, rgba(var(--cyan-rgb),.08) 62%, rgba(var(--cyan-rgb),.24) 100%); position:relative; }
+    .grad-bg::before, .grad-bg::after { content:''; position:absolute; left:0; right:0; height:140px; pointer-events:none; z-index:0; }
+    .grad-bg::before { top:0; background:linear-gradient(to bottom,var(--bg),transparent); }
+    .grad-bg::after  { bottom:0; background:linear-gradient(to top,var(--bg),transparent); }
+    .grad-bg .section-inner { position:relative; z-index:1; }
+
+    /* SECTION COMMONS */
+    .section { padding:clamp(5rem,10vw,10rem) clamp(1.5rem,5vw,4rem); }
+    .section-inner { max-width:var(--max); margin:0 auto; }
+    .s-eyebrow { font-size:.68rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:1.2rem; display:block; }
+    .s-title { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,4rem); font-weight:700; letter-spacing:-.04em; line-height:1.2; }
+    .s-title em { font-style:normal; font-weight:300; background:linear-gradient(135deg,var(--accent),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .s-sub { font-size:clamp(.95rem,1.4vw,1.1rem); color:var(--text-dim); line-height:1.8; max-width:58ch; margin-top:1.2rem; }
+    .r { opacity:0; transform:translateY(32px); transition:opacity .85s var(--ease-out),transform .85s var(--ease-out); }
+    .r.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s} .d5{transition-delay:.40s} .d6{transition-delay:.48s}
+
+    /* WHY ME */
+    .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:5rem; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+    .why-card { padding:2.5rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); transition:background .4s; position:relative; overflow:hidden; }
+    .why-card:hover { background:var(--bg-2); }
+    .why-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle 200px at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.07),transparent); opacity:0; transition:opacity .4s; }
+    .why-card:hover::before { opacity:1; }
+    .why-card:nth-child(2n) { border-right:none; }
+    .why-card:nth-last-child(-n+2) { border-bottom:none; }
+    .why-num { font-family:var(--font-head); font-size:.68rem; font-weight:700; color:var(--text-muted); letter-spacing:.15em; margin-bottom:1.2rem; }
+    .why-icon { font-size:1.5rem; margin-bottom:1rem; }
+    .why-title { font-family:var(--font-head); font-size:1.1rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.6rem; }
+    .why-text { font-size:.9rem; color:var(--text-dim); line-height:1.7; }
+
+    /* SERVICES */
+    .srv-section { background:transparent; }
+    .srv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border-radius:16px; overflow:hidden; margin-top:4rem; }
+    .srv-card { background:var(--bg-2); padding:2.5rem; transition:background .4s; position:relative; }
+    .srv-card:hover { background:var(--bg-3); }
+    .srv-card-icon { width:44px; height:44px; border-radius:10px; background:rgba(var(--accent-rgb),.12); border:1px solid rgba(var(--accent-rgb),.25); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem; }
+    .srv-card-icon svg { color:var(--accent); }
+    .srv-card-title { font-family:var(--font-head); font-size:1.05rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.8rem; }
+    .srv-card-text { font-size:.88rem; color:var(--text-dim); line-height:1.75; }
+    .srv-card-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1.5rem; }
+    .srv-tag { font-size:.68rem; letter-spacing:.06em; color:var(--text-muted); background:var(--bg-4); border:1px solid var(--border); padding:.25rem .7rem; border-radius:100px; }
+
+    /* PROCESS */
+    .process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:5rem; position:relative; }
+    .process-steps::before { content:''; position:absolute; top:28px; left:calc(12.5% + 28px); right:calc(12.5% + 28px); height:1px; background:linear-gradient(90deg,var(--accent),var(--cyan)); }
+    .process-step { text-align:center; padding:0 1.5rem; }
+    .process-num { width:56px; height:56px; border-radius:50%; background:var(--bg-2); border:1px solid var(--border-2); display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:.82rem; font-weight:700; color:var(--accent); margin:0 auto 1.5rem; position:relative; z-index:1; transition:background .4s,border-color .4s,box-shadow .4s; }
+    .process-step:hover .process-num { background:var(--accent); color:var(--bg); border-color:var(--accent); box-shadow:0 0 28px rgba(var(--accent-rgb),.4); }
+    .process-step-title { font-family:var(--font-head); font-size:.95rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.6rem; }
+    .process-step-text { font-size:.82rem; color:var(--text-dim); line-height:1.7; }
+
+    /* RESULTS */
+    .results-section { background:transparent; }
+    .results-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border-radius:16px; overflow:hidden; margin-top:4rem; }
+    .result-card { background:var(--bg-2); padding:3rem; }
+    .result-card:hover { background:var(--bg-3); }
+    .result-metric { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4rem); font-weight:700; letter-spacing:-.04em; background:linear-gradient(135deg,var(--accent),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:.5rem; }
+    .result-project { font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:.8rem; }
+    .result-title { font-family:var(--font-head); font-size:1.1rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.6rem; }
+    .result-text { font-size:.88rem; color:var(--text-dim); line-height:1.7; }
+
+    /* TESTIMONIALS */
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; }
+    .testi-card { background:var(--bg-2); border:1px solid var(--border); border-radius:16px; padding:2.5rem; position:relative; overflow:hidden; transition:border-color .4s,transform .4s var(--ease-out); }
+    .testi-card:hover { border-color:rgba(var(--accent-rgb),.3); transform:translateY(-4px); }
+    .testi-quote { font-size:3rem; line-height:1; color:var(--accent); font-family:serif; position:absolute; top:1.5rem; right:2rem; opacity:.3; }
+    .testi-stars { display:flex; gap:.3rem; margin-bottom:1.5rem; }
+    .testi-star { color:var(--accent); font-size:.9rem; }
+    .testi-text { font-size:.95rem; color:var(--text-dim); line-height:1.8; font-style:italic; margin-bottom:2rem; }
+    .testi-author { display:flex; align-items:center; gap:.75rem; }
+    .testi-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--cyan)); display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:.82rem; font-weight:700; color:var(--bg); flex-shrink:0; }
+    .testi-name { font-family:var(--font-head); font-size:.9rem; font-weight:700; letter-spacing:-.01em; }
+    .testi-role { font-size:.78rem; color:var(--text-muted); }
+
+    /* PRICING */
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; align-items:stretch; }
+    .price-card { background:var(--bg-2); border:1px solid var(--border); border-radius:16px; padding:2.5rem; transition:border-color .4s,transform .4s var(--ease-out); display:flex; flex-direction:column; }
+    .price-card:hover { border-color:rgba(var(--accent-rgb),.3); transform:translateY(-4px); }
+    .price-card.featured { background:var(--bg-3); border-color:rgba(var(--accent-rgb),.5); position:relative; }
+    .price-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg); font-family:var(--font-head); font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.3rem 1rem; border-radius:100px; white-space:nowrap; }
+    .price-name { font-family:var(--font-head); font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem; }
+    .price-amount { font-family:var(--font-head); font-size:clamp(2rem,4vw,3rem); font-weight:700; letter-spacing:-.04em; margin-bottom:.25rem; }
+    .price-amount sup { font-size:1.2rem; vertical-align:super; }
+    .price-period { font-size:.82rem; color:var(--text-muted); margin-bottom:1.5rem; }
+    .price-desc { font-size:.88rem; color:var(--text-dim); line-height:1.7; margin-bottom:2rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+    .price-features { list-style:none; display:flex; flex-direction:column; gap:.85rem; margin-bottom:2.5rem; flex:1; }
+    .price-features li { font-size:.88rem; color:var(--text-dim); display:flex; align-items:flex-start; gap:.6rem; line-height:1.5; }
+    .price-features li::before { content:''; width:16px; height:16px; border-radius:50%; background:rgba(var(--accent-rgb),.15); border:1px solid rgba(var(--accent-rgb),.4); flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center; background-image:url("data:image/svg+xml,%3Csvg width='8' height='6' viewBox='0 0 8 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L3 5L7 1' stroke='%239B5DE5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
+    .price-cta { display:block; text-align:center; font-family:var(--font-head); font-size:.88rem; font-weight:600; padding:.85rem; border-radius:100px; text-decoration:none; transition:all .3s var(--ease-out); }
+    .price-cta-outline { color:var(--text); border:1px solid var(--border-2); }
+    .price-cta-outline:hover { border-color:var(--accent); color:var(--accent); }
+    .price-cta-fill { color:var(--bg); background:var(--accent); }
+    .price-cta-fill:hover { background:linear-gradient(135deg,var(--accent),var(--cyan)); transform:translateY(-2px); box-shadow:0 10px 28px rgba(var(--accent-rgb),.4); }
+
+    /* FAQ */
+    .faq-list { margin-top:4rem; max-width:780px; }
+    .faq-item { border-bottom:1px solid var(--border); }
+    .faq-q { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1.6rem 0; font-family:var(--font-head); font-size:1rem; font-weight:600; letter-spacing:-.02em; cursor:pointer; transition:color .3s; user-select:none; }
+    .faq-q:hover { color:var(--accent); }
+    .faq-icon { width:28px; height:28px; border-radius:50%; border:1px solid var(--border-2); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:background .3s,border-color .3s,transform .4s var(--ease-out); }
+    .faq-item.open .faq-icon { background:var(--accent); border-color:var(--accent); transform:rotate(45deg); }
+    .faq-icon svg { color:var(--text-dim); transition:color .3s; }
+    .faq-item.open .faq-icon svg { color:var(--bg); }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height .5s var(--ease-out),padding .4s; }
+    .faq-item.open .faq-a { max-height:300px; }
+    .faq-a-inner { padding-bottom:1.6rem; font-size:.95rem; color:var(--text-dim); line-height:1.8; }
+
+    /* CONTACT / BOOK A CALL */
+    .cta-section { background: linear-gradient(100deg, rgba(var(--accent-rgb),.20) 0%, rgba(var(--accent-rgb),.05) 38%, rgba(var(--cyan-rgb),.10) 62%, rgba(var(--cyan-rgb),.28) 100%); position:relative; }
+    .cta-section::before, .cta-section::after { content:''; position:absolute; left:0; right:0; height:140px; pointer-events:none; z-index:0; }
+    .cta-section::before { top:0; background:linear-gradient(to bottom,var(--bg),transparent); }
+    .cta-section::after  { bottom:0; background:linear-gradient(to top,var(--bg),transparent); }
+    .contact-split { max-width:var(--max); margin:0 auto; padding:clamp(5rem,10vw,10rem) clamp(1.5rem,5vw,4rem); display:grid; grid-template-columns:1fr 1.1fr; gap:clamp(3rem,6vw,6rem); align-items:start; position:relative; z-index:1; }
+    .contact-left { position:sticky; top:8rem; }
+    .contact-heading { font-family:var(--font-display); font-size:clamp(2.8rem,5vw,5rem); font-weight:700; letter-spacing:-.04em; line-height:1.1; margin-bottom:1.5rem; }
+    .contact-heading .grad { background:linear-gradient(135deg,var(--accent),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .contact-body { font-size:clamp(.9rem,1.3vw,1rem); color:var(--text-dim); line-height:1.85; max-width:40ch; margin-bottom:2rem; }
+    .contact-email { display:inline-flex; align-items:center; gap:.4rem; color:var(--accent); font-size:.9rem; font-weight:500; text-decoration:none; border-bottom:1px solid rgba(var(--accent-rgb),.35); padding-bottom:.15rem; transition:border-color .3s,opacity .3s; }
+    .contact-email:hover { border-color:var(--accent); opacity:.75; }
+
+    /* Booking panel */
+    .book-panel { background:var(--bg); border:1px solid var(--border-2); border-radius:20px; padding:2.2rem; }
+    .book-heading { font-family:var(--font-display); font-size:1.5rem; font-weight:700; letter-spacing:-.03em; margin-bottom:.5rem; }
+    .book-desc { font-size:.85rem; color:var(--text-dim); line-height:1.7; margin-bottom:1.6rem; }
+    .book-pills { display:flex; gap:.55rem; margin-bottom:1.6rem; flex-wrap:wrap; }
+    .book-pill { font-family:var(--font-head); font-size:.78rem; font-weight:600; padding:.5rem 1.1rem; border-radius:100px; border:1px solid var(--border-2); background:transparent; color:var(--text-dim); cursor:pointer; transition:all .2s; }
+    .book-pill.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .book-pill:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
+    .book-divider { height:1px; background:var(--border); margin:1.4rem 0; }
+
+    /* Calendar */
+    .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+    .cal-month-label { font-family:var(--font-head); font-size:.9rem; font-weight:700; }
+    .cal-nav-btn { width:30px; height:30px; border-radius:50%; border:1px solid var(--border-2); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:border-color .2s,background .2s; color:var(--text-dim); font-size:.85rem; }
+    .cal-nav-btn:hover { border-color:var(--accent); background:rgba(var(--accent-rgb),.08); color:var(--accent); }
+    .cal-day-headers { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:.4rem; }
+    .cal-day-hdr { text-align:center; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); padding:.25rem 0; }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+    .cal-day { text-align:center; padding:.5rem .2rem; border-radius:8px; font-size:.82rem; font-family:var(--font-head); cursor:pointer; transition:background .18s,color .18s; color:var(--text); }
+    .cal-day.cal-empty { cursor:default; }
+    .cal-day.cal-past { color:var(--text-muted); cursor:default; pointer-events:none; }
+    .cal-day.cal-today { font-weight:700; color:var(--accent); }
+    .cal-day.cal-selected { background:var(--accent); color:#fff !important; font-weight:700; border-radius:8px; }
+    .cal-day:hover:not(.cal-empty):not(.cal-past):not(.cal-selected) { background:rgba(var(--accent-rgb),.12); color:var(--accent); }
+
+    /* Time slots */
+    .book-times { margin-top:1.4rem; }
+    .book-times-hdr { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem; }
+    .book-times-label { font-family:var(--font-head); font-size:.88rem; font-weight:700; }
+    .book-times-date { font-size:.75rem; color:var(--text-muted); }
+    .book-period { font-size:.62rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:.5rem; margin-top:1rem; }
+    .slots-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; }
+    .slot-btn { font-family:var(--font-head); font-size:.8rem; font-weight:500; padding:.65rem .4rem; border:1px solid var(--border-2); border-radius:9px; background:var(--bg-2); cursor:pointer; transition:all .18s; color:var(--text); text-align:center; }
+    .slot-btn:hover { border-color:var(--accent); background:rgba(var(--accent-rgb),.07); color:var(--accent); }
+    .slot-btn.selected { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+    .book-tz { font-size:.7rem; color:var(--text-muted); margin-top:.9rem; }
+
+    /* Confirm row */
+    .book-confirm { padding-top:1.2rem; margin-top:1.2rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:1rem; }
+    .book-confirm-summary { font-size:.8rem; color:var(--text-dim); line-height:1.5; }
+    .book-fields { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+    .book-field { display:flex; flex-direction:column; gap:.35rem; }
+    .book-field label { font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-muted); }
+    .book-field input { font-family:var(--font-body); font-size:.88rem; color:var(--text); background:var(--bg-2); border:1px solid var(--border-2); border-radius:10px; padding:.7rem 1rem; outline:none; transition:border-color .2s,box-shadow .2s; }
+    .book-field input::placeholder { color:var(--text-muted); }
+    .book-field input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(var(--accent-rgb),.12); }
+    .book-field input.input-error { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,.1); }
+    .book-confirm-row { display:flex; align-items:center; justify-content:flex-end; }
+    .book-confirm-btn { font-family:var(--font-head); font-size:.85rem; font-weight:600; color:#fff; background:var(--accent); padding:.8rem 1.6rem; border-radius:100px; border:none; cursor:pointer; white-space:nowrap; transition:background .3s,transform .3s var(--ease-out),box-shadow .3s; }
+    .book-confirm-btn:hover { background:#7C3DC0; transform:translateY(-2px); box-shadow:0 8px 24px rgba(var(--accent-rgb),.35); }
+    @media(max-width:860px) { .contact-split{grid-template-columns:1fr} .contact-left{position:static} }
+
+    /* BOOKING CONFIRMED MODAL */
+    .bmodal-overlay { position:fixed; inset:0; background:rgba(13,11,16,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); z-index:2000; display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity .35s; }
+    .bmodal-overlay.open { opacity:1; pointer-events:all; }
+    .bmodal { background:var(--bg); border:1px solid var(--border-2); border-radius:24px; padding:3rem 2.5rem; max-width:460px; width:100%; text-align:center; transform:translateY(24px) scale(.97); transition:transform .4s var(--ease-out); }
+    .bmodal-overlay.open .bmodal { transform:none; }
+    .bmodal-icon { width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--cyan)); display:flex; align-items:center; justify-content:center; margin:0 auto 1.6rem; }
+    .bmodal-icon svg { color:#fff; }
+    .bmodal-title { font-family:var(--font-display); font-size:1.9rem; font-weight:700; letter-spacing:-.04em; margin-bottom:.7rem; }
+    .bmodal-sub { font-size:.9rem; color:var(--text-dim); line-height:1.75; margin-bottom:1.8rem; max-width:34ch; margin-left:auto; margin-right:auto; }
+    .bmodal-details { background:var(--bg-2); border:1px solid var(--border); border-radius:14px; padding:1.2rem 1.4rem; margin-bottom:2rem; text-align:left; display:flex; flex-direction:column; gap:.7rem; }
+    .bmodal-row { display:flex; align-items:center; gap:.8rem; font-size:.85rem; }
+    .bmodal-lbl { font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); width:58px; flex-shrink:0; }
+    .bmodal-val { color:var(--text); font-weight:500; }
+    .bmodal-actions { display:flex; flex-direction:column; gap:.75rem; }
+    .bmodal-gcal { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; font-family:var(--font-head); font-size:.88rem; font-weight:600; color:var(--text); background:var(--bg-2); border:1px solid var(--border-2); padding:.85rem 1.5rem; border-radius:100px; text-decoration:none; transition:border-color .3s,background .3s,color .3s; }
+    .bmodal-gcal:hover { border-color:var(--accent); background:rgba(var(--accent-rgb),.06); color:var(--accent); }
+    .bmodal-close { font-family:var(--font-head); font-size:.9rem; font-weight:600; color:#fff; background:var(--accent); padding:.9rem 2.8rem; border-radius:100px; border:none; cursor:pointer; transition:background .3s,transform .3s var(--ease-out); }
+    .bmodal-close:hover { background:#7C3DC0; transform:translateY(-2px); }
+
+    /* FOOTER */
+    footer { padding:2.5rem clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; border-top:1px solid var(--border); }
+    .footer-logo { font-family:var(--font-head); font-size:.9rem; font-weight:700; letter-spacing:-.02em; }
+    .footer-logo span { color:var(--accent); }
+    .footer-links { display:flex; gap:2rem; }
+    .footer-links a { font-size:.78rem; color:var(--text-muted); text-decoration:none; transition:color .3s; }
+    .footer-links a:hover { color:var(--text); }
+    .footer-copy { font-size:.75rem; color:var(--text-muted); }
+
+
+    /* RESPONSIVE */
+    @media(max-width:1024px) {
+      .why-grid { grid-template-columns:1fr; }
+      .why-card { border-right:none; }
+      .why-card:nth-last-child(-n+1) { border-bottom:none; }
+      .why-card:nth-child(n) { border-bottom:1px solid var(--border); }
+      .why-card:last-child { border-bottom:none; }
+      .process-steps { grid-template-columns:1fr 1fr; gap:3rem; }
+      .process-steps::before { display:none; }
+    }
+    @media(max-width:900px) {
+      .nav-links { display:none; }
+      .srv-grid { grid-template-columns:1fr 1fr; }
+      .results-grid { grid-template-columns:1fr; }
+      .testi-grid { grid-template-columns:1fr; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .why-grid { grid-template-columns:1fr 1fr; }
+      .why-card:nth-child(2n) { border-right:none; }
+      .why-card:nth-child(2n-1) { border-right:1px solid var(--border); }
+    }
+    @media(max-width:600px) {
+      .srv-grid { grid-template-columns:1fr; }
+      .why-grid { grid-template-columns:1fr; }
+      .why-card { border-right:none; border-bottom:1px solid var(--border); }
+      .why-card:last-child { border-bottom:none; }
+      .hero-metrics { gap:2rem; }
+      .process-steps { grid-template-columns:1fr; }
+      .results-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <svg class="logo-mark" viewBox="0 0 53 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logo-g" x1="0" y1="64" x2="53" y2="0" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#9b5de5"/>
+          <stop offset="1" stop-color="#06b6d4"/>
+        </linearGradient>
+      </defs>
+      <text x="3" y="47" font-family="'Comfortaa', cursive" font-size="49" font-weight="700" fill="url(#logo-g)">L</text>
+      <text x="14" y="47" font-family="'Comfortaa', cursive" font-size="49" font-weight="700" fill="url(#logo-g)">C</text>
+      <ellipse cx="36.5" cy="31.5" rx="5.5" ry="5.5" fill="url(#logo-g)"/>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book a call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge r">Available for new projects</div>
+    <h1 class="hero-h1 r d1">
+      Make your<br>Product<br><span class="grad">Legendary.</span>
+    </h1>
+    <p class="hero-sub r d2">Senior UX/UI Designer with a frontend background — helping startups ship fast products users love.</p>
+    <div class="hero-actions r d3">
+      <a href="#contact" class="btn-primary">
+        Book a free call
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#results" class="btn-ghost">
+        See my work
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><span class="marquee-dot"></span>Figma</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Framer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Material Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>WCAG 2.1 AA</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Design Systems</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>User Research</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Angular Fuse</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Apple HIG</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>tvOS · iOS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>VR / AR</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Workflows</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prototyping</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item"><span class="marquee-dot"></span>Figma</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Framer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Material Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>WCAG 2.1 AA</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Design Systems</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>User Research</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Angular Fuse</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Apple HIG</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>tvOS · iOS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>VR / AR</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Workflows</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prototyping</span>
+  </div>
+</div>
+
+<!-- WHY ME -->
+<section class="section grad-bg" id="why">
+  <div class="section-inner">
+    <span class="s-eyebrow r">Why work with me</span>
+    <h2 class="s-title r d1">Not just a designer.<br><em>A strategic partner.</em></h2>
+    <p class="s-sub r d2">I've worked across SaaS, banking, mobile, VR, and e-commerce. Here's what makes the difference.</p>
+    <div class="why-grid">
+      <div class="why-card r d1">
+        <div class="why-num">01</div>
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Fast without cutting corners</div>
+        <p class="why-text">Investor-ready prototypes delivered in days, not weeks. My frontend background means I design with real constraints in mind — no handoff surprises for developers.</p>
+      </div>
+      <div class="why-card r d2">
+        <div class="why-num">02</div>
+        <div class="why-icon">🎯</div>
+        <div class="why-title">Business goals first</div>
+        <p class="why-text">Beautiful design that doesn't convert is decoration. Every decision I make — layout, copy, flow — is tied to a metric: retention, conversion, activation, or revenue.</p>
+      </div>
+      <div class="why-card r d3">
+        <div class="why-num">03</div>
+        <div class="why-icon">🔬</div>
+        <div class="why-title">Research-backed decisions</div>
+        <p class="why-text">I don't guess. User interviews, heuristic audits, and usability testing are built into my process — so you ship with confidence, not hope.</p>
+      </div>
+      <div class="why-card r d4">
+        <div class="why-num">04</div>
+        <div class="why-icon">🌐</div>
+        <div class="why-title">True cross-platform range</div>
+        <p class="why-text">Web, iOS, Android, tvOS, VR/AR, kiosks — I've shipped across all of them. Each platform has its own rules and I know them.</p>
+      </div>
+      <div class="why-card r d5">
+        <div class="why-num">05</div>
+        <div class="why-icon">📐</div>
+        <div class="why-title">Clean, scalable deliverables</div>
+        <p class="why-text">Auto-layouts, component libraries, documented tokens. My Figma files are legendary among developers — clear enough to build from without a meeting.</p>
+      </div>
+      <div class="why-card r d6">
+        <div class="why-num">06</div>
+        <div class="why-icon">🤝</div>
+        <div class="why-title">Direct, async-friendly collaboration</div>
+        <p class="why-text">No account managers, no layers. You work directly with me. I'm responsive, transparent about progress, and I communicate in business language.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section srv-section" id="services">
+  <div class="section-inner">
+    <span class="s-eyebrow r">What I offer</span>
+    <h2 class="s-title r d1">End-to-end design,<br><em>Start to finish.</em></h2>
+    <p class="s-sub r d2">From the first user interview to the final dev handoff — I handle the full design lifecycle so you can focus on building your business.</p>
+    <div class="srv-grid">
+      <div class="srv-card r d1">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="srv-card-title">UX Strategy & Research</div>
+        <p class="srv-card-text">User interviews, competitor audits, heuristic evaluations, and journey mapping to uncover exactly what your users need and what's costing you conversions.</p>
+        <div class="srv-card-tags"><span class="srv-tag">User Interviews</span><span class="srv-tag">UX Audit</span><span class="srv-tag">Journey Mapping</span><span class="srv-tag">Competitor Analysis</span></div>
+      </div>
+      <div class="srv-card r d2">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+        </div>
+        <div class="srv-card-title">Wireframing & Prototyping</div>
+        <p class="srv-card-text">From quick lo-fi sketches to fully interactive Figma prototypes — so you can test ideas with real users and investors before committing to development.</p>
+        <div class="srv-card-tags"><span class="srv-tag">Lo-fi Wireframes</span><span class="srv-tag">Interactive Prototypes</span><span class="srv-tag">Usability Testing</span></div>
+      </div>
+      <div class="srv-card r d3">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="srv-card-title">UI & Visual Design</div>
+        <p class="srv-card-text">High-fidelity screens with consistent typography, color systems, and motion — designed to delight users and reflect your brand's personality at every touchpoint.</p>
+        <div class="srv-card-tags"><span class="srv-tag">Hi-fi UI</span><span class="srv-tag">Branding</span><span class="srv-tag">Motion Design</span><span class="srv-tag">Accessibility</span></div>
+      </div>
+      <div class="srv-card r d4">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+        </div>
+        <div class="srv-card-title">Design Systems</div>
+        <p class="srv-card-text">Scalable component libraries with documented tokens, variants, and states. Built in Figma with developer handoff in mind — reducing build time by 40%+.</p>
+        <div class="srv-card-tags"><span class="srv-tag">Component Library</span><span class="srv-tag">Design Tokens</span><span class="srv-tag">Figma Variables</span><span class="srv-tag">Dev Handoff</span></div>
+      </div>
+      <div class="srv-card r d5">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="srv-card-title">Responsive Web & App Design</div>
+        <p class="srv-card-text">Mobile, tablet, and desktop — optimised for every breakpoint. I design for how real users actually interact with your product, not just the ideal scenario.</p>
+        <div class="srv-card-tags"><span class="srv-tag">Mobile-first</span><span class="srv-tag">iOS · Android</span><span class="srv-tag">Web App</span><span class="srv-tag">tvOS · VR</span></div>
+      </div>
+      <div class="srv-card r d6">
+        <div class="srv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="srv-card-title">UX Audit & Conversion Optimisation</div>
+        <p class="srv-card-text">A focused review of your existing product that identifies friction, drop-off points, and quick wins — delivered as a prioritised action plan within 5 business days.</p>
+        <div class="srv-card-tags"><span class="srv-tag">Heuristic Evaluation</span><span class="srv-tag">Friction Mapping</span><span class="srv-tag">CRO</span><span class="srv-tag">Quick Wins Report</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section grad-bg" id="process">
+  <div class="section-inner">
+    <span class="s-eyebrow r">How it works</span>
+    <h2 class="s-title r d1">From brief to launch,<br><em>Without the chaos.</em></h2>
+    <p class="s-sub r d2">A structured, async-friendly process that keeps projects on track and clients in the loop at every stage.</p>
+    <div class="process-steps">
+      <div class="process-step r d1">
+        <div class="process-num">01</div>
+        <div class="process-step-title">Discovery Call</div>
+        <p class="process-step-text">30 min to understand your product, users, goals, and constraints. Free, no commitment.</p>
+      </div>
+      <div class="process-step r d2">
+        <div class="process-num">02</div>
+        <div class="process-step-title">Research & Strategy</div>
+        <p class="process-step-text">User interviews, competitive analysis, and a clear UX strategy document before any pixels move.</p>
+      </div>
+      <div class="process-step r d3">
+        <div class="process-num">03</div>
+        <div class="process-step-title">Design & Iterate</div>
+        <p class="process-step-text">Wireframes → prototypes → high-fidelity UI. Weekly reviews with structured feedback rounds.</p>
+      </div>
+      <div class="process-step r d4">
+        <div class="process-num">04</div>
+        <div class="process-step-title">Handoff & Support</div>
+        <p class="process-step-text">Clean Figma files, annotated specs, and 2 weeks of post-launch support included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section results-section" id="results">
+  <div class="section-inner">
+    <span class="s-eyebrow r">Proven results</span>
+    <h2 class="s-title r d1">Design that moves<br><em>The numbers.</em></h2>
+    <p class="s-sub r d2">Real outcomes from real projects — not just pretty screens.</p>
+    <div class="results-grid">
+      <div class="result-card r d1">
+        <div class="result-project">Ascent — Music App</div>
+        <div class="result-metric">+25%</div>
+        <div class="result-title">In-app purchase conversion</div>
+        <p class="result-text">Redesigned social UX and progression mechanics to create natural, high-intent upgrade moments. Social features became the #1 rated aspect in App Store reviews post-launch.</p>
+      </div>
+      <div class="result-card r d2">
+        <div class="result-project">Biometry Bank — B2B Fintech</div>
+        <div class="result-metric">−50%</div>
+        <div class="result-title">Login friction for enterprise users</div>
+        <p class="result-text">Redesigned biometric authentication for a global banking platform. Login time halved, session failures dropped, and the system rolled out across 12 countries with zero critical incidents.</p>
+      </div>
+      <div class="result-card r d3">
+        <div class="result-project">VR Worlds — Meta Horizon</div>
+        <div class="result-metric">2×</div>
+        <div class="result-title">User retention after VR launch</div>
+        <p class="result-text">Led the UX transition from mobile to fully immersive VR. Defined spatial interaction patterns, comfort guidelines, and first-time onboarding — doubling retention in month one.</p>
+      </div>
+      <div class="result-card r d4">
+        <div class="result-project">Marketing Creatives — Ascent</div>
+        <div class="result-metric">+50%</div>
+        <div class="result-title">App installs from ad campaigns</div>
+        <p class="result-text">Designed a data-driven creative testing framework across static, carousel, and short-form video formats. Installs increased 50% in the first campaign cycle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section grad-bg" id="testimonials">
+  <div class="section-inner">
+    <span class="s-eyebrow r">Client feedback</span>
+    <h2 class="s-title r d1">What clients<br><em>Actually say.</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card r d1">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-text">Laura delivered an investor-ready prototype in under a week. Her Figma files were so clean our developers built the first version without a single handoff meeting. Genuinely rare.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MK</div>
+          <div>
+            <div class="testi-name">Mihai K.</div>
+            <div class="testi-role">Co-Founder, SaaS Startup</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card r d2">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-text">She took our confusing onboarding and turned it into something users actually complete. Support tickets dropped significantly after launch. She doesn't just design — she solves problems.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AP</div>
+          <div>
+            <div class="testi-name">Alex P.</div>
+            <div class="testi-role">Product Manager, B2B Platform</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card r d3">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
+        <p class="testi-text">Finally a designer who speaks both design and engineering. She understood our technical constraints on day one and never once handed us something that was impossible to build.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RA</div>
+          <div>
+            <div class="testi-name">Radu A.</div>
+            <div class="testi-role">CTO, Fintech Startup</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <span class="s-eyebrow r">Investment</span>
+    <h2 class="s-title r d1">Transparent pricing.<br><em>No surprises.</em></h2>
+    <p class="s-sub r d2">Choose the engagement that fits your stage. All packages include direct communication, weekly check-ins, and clean Figma deliverables.</p>
+    <div class="pricing-grid">
+      <div class="price-card r d1">
+        <div class="price-name">Sprint</div>
+        <div class="price-amount"><sup>€</sup>1,500</div>
+        <div class="price-period">one-time · delivered in 1–2 weeks</div>
+        <p class="price-desc">A focused design sprint for a single critical flow or feature. Perfect for fixing a leaky funnel or validating an idea fast.</p>
+        <ul class="price-features">
+          <li>UX audit of 1 core flow</li>
+          <li>Wireframes + hi-fi UI screens</li>
+          <li>1 round of revisions</li>
+          <li>Figma file with dev specs</li>
+          <li>1 week post-delivery support</li>
+        </ul>
+        <a href="#contact" class="price-cta price-cta-outline">Get started</a>
+      </div>
+      <div class="price-card featured r d2">
+        <div class="price-badge">Most popular</div>
+        <div class="price-name">Full Project</div>
+        <div class="price-amount"><sup>€</sup>4,500</div>
+        <div class="price-period">one-time · 4–8 weeks end-to-end</div>
+        <p class="price-desc">Complete product design from research to handoff. Ideal for MVPs, redesigns, or launching a new feature area.</p>
+        <ul class="price-features">
+          <li>User research & strategy document</li>
+          <li>Full wireframe set + prototypes</li>
+          <li>Hi-fidelity UI for all screens</li>
+          <li>Design system / component library</li>
+          <li>3 rounds of revisions</li>
+          <li>Figma files + developer annotations</li>
+          <li>2 weeks post-launch support</li>
+        </ul>
+        <a href="#contact" class="price-cta price-cta-fill">Book a call</a>
+      </div>
+      <div class="price-card r d3">
+        <div class="price-name">Design Partner</div>
+        <div class="price-amount"><sup>€</sup>2,800<span style="font-size:1.2rem;color:var(--text-dim)">/mo</span></div>
+        <div class="price-period">monthly retainer · cancel anytime</div>
+        <p class="price-desc">Your embedded design partner on a monthly basis. Ideal for teams that ship constantly and need senior UX/UI capacity without a full-time hire.</p>
+        <ul class="price-features">
+          <li>Up to 60 hours/month design work</li>
+          <li>Unlimited design requests & revisions</li>
+          <li>Weekly strategy calls</li>
+          <li>Async Slack/Loom collaboration</li>
+          <li>Priority turnaround (48h)</li>
+          <li>Monthly design system updates</li>
+        </ul>
+        <a href="#contact" class="price-cta price-cta-outline">Let's talk</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:2.5rem;font-size:.82rem;color:var(--text-muted);">Not sure which fits? <a href="#contact" style="color:var(--accent);text-decoration:none;">Book a free 30-minute discovery call</a> and we'll figure it out together.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <span class="s-eyebrow r">FAQ</span>
+    <h2 class="s-title r d1">Questions you're<br><em>Probably wondering.</em></h2>
+    <div class="faq-list">
+      <div class="faq-item r d1">
+        <div class="faq-q">
+          How quickly can you start?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Typically within 1–2 weeks of the discovery call, depending on my current capacity. I keep my client list intentionally small so every project gets focused attention. Book a call to check current availability.</div></div>
+      </div>
+      <div class="faq-item r d2">
+        <div class="faq-q">
+          Do you also do development / Framer builds?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Yes — I have a frontend background and can build in Framer for marketing sites and prototypes. For production web apps I deliver clean Figma specs optimised for your dev stack (Angular, React, etc.).</div></div>
+      </div>
+      <div class="faq-item r d3">
+        <div class="faq-q">
+          What if I only need a UX audit, not a full redesign?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Absolutely. A UX audit is actually a great starting point — it gives you a prioritised roadmap of what to fix and why before spending on design or development. It's available as a standalone deliverable outside the packages above.</div></div>
+      </div>
+      <div class="faq-item r d4">
+        <div class="faq-q">
+          How do you handle feedback and revisions?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">I use structured feedback rounds (clearly defined in the proposal) with Figma comments for async review. This keeps things clear and avoids endless revision cycles. Most projects stay on schedule because the process is tight from the start.</div></div>
+      </div>
+      <div class="faq-item r d5">
+        <div class="faq-q">
+          Do you work with early-stage startups?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Yes — some of my best work has been for early-stage founders who need to validate fast. I can help you go from concept to a testable prototype in under two weeks, which is often what you need for user testing or investor conversations.</div></div>
+      </div>
+      <div class="faq-item r d6">
+        <div class="faq-q">
+          What industries do you specialise in?
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">B2B SaaS, fintech/banking, mobile apps, gaming, VR/AR, and e-commerce. I've also designed kiosk hardware UX, tvOS experiences, and civic tech apps. If it involves a screen and users, I can help.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / BOOK A CALL -->
+<section class="cta-section" id="contact">
+  <div class="contact-split">
+
+    <!-- Left: copy -->
+    <div class="contact-left">
+      <span class="s-eyebrow r d1">Open to new projects</span>
+      <h2 class="contact-heading r d2">Let's work<br><span class="grad">together</span></h2>
+      <p class="contact-body r d3">Whether you have a product that needs a design overhaul or a bold new idea that needs to come to life — I'd love to hear about it.</p>
+      <a href="mailto:laura.elena.comanac@gmail.com" class="contact-email r d4">laura.elena.comanac@gmail.com</a>
+    </div>
+
+    <!-- Right: booking widget -->
+    <div class="book-panel r d2">
+      <h3 class="book-heading">Book a call</h3>
+      <p class="book-desc">Pick a session type, then choose a date and time that works for you.</p>
+
+      <div class="book-pills">
+        <button class="book-pill active" data-mins="30" data-label="Intro Call">30 min · Intro Call</button>
+        <button class="book-pill" data-mins="60" data-label="Project Deep-Dive">60 min · Project Deep-Dive</button>
+      </div>
+
+      <div class="book-divider"></div>
+
+      <!-- Calendar -->
+      <div class="cal-header">
+        <button class="cal-nav-btn" id="cal-prev">&#8592;</button>
+        <span class="cal-month-label" id="cal-month"></span>
+        <button class="cal-nav-btn" id="cal-next">&#8594;</button>
+      </div>
+      <div class="cal-day-headers">
+        <span class="cal-day-hdr">Mo</span><span class="cal-day-hdr">Tu</span><span class="cal-day-hdr">We</span>
+        <span class="cal-day-hdr">Th</span><span class="cal-day-hdr">Fr</span><span class="cal-day-hdr">Sa</span><span class="cal-day-hdr">Su</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+
+      <!-- Time slots (hidden until date selected) -->
+      <div class="book-times" id="book-times" style="display:none">
+        <div class="book-divider"></div>
+        <div class="book-times-hdr">
+          <span class="book-times-label">Available times</span>
+          <span class="book-times-date" id="book-times-date"></span>
+        </div>
+        <div class="book-period">Morning</div>
+        <div class="slots-grid" id="slots-morning"></div>
+        <div class="book-period">Afternoon</div>
+        <div class="slots-grid" id="slots-afternoon"></div>
+        <p class="book-tz">🕐 All times shown in your local timezone</p>
+      </div>
+
+      <!-- Confirm (hidden until slot selected) -->
+      <div class="book-confirm" id="book-confirm" style="display:none">
+        <div class="book-confirm-summary" id="book-confirm-summary"></div>
+        <div class="book-fields">
+          <div class="book-field">
+            <label for="book-name">Your name</label>
+            <input type="text" id="book-name" placeholder="Jane Smith" autocomplete="name" />
+          </div>
+          <div class="book-field">
+            <label for="book-email">Your email</label>
+            <input type="email" id="book-email" placeholder="jane@company.com" autocomplete="email" />
+          </div>
+        </div>
+        <div class="book-confirm-row">
+          <button class="book-confirm-btn" id="book-confirm-btn">Confirm Booking →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BOOKING CONFIRMED MODAL -->
+<div class="bmodal-overlay" id="bmodal-overlay" role="dialog" aria-modal="true" aria-labelledby="bmodal-title">
+  <div class="bmodal">
+    <div class="bmodal-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3 class="bmodal-title" id="bmodal-title">Booking Confirmed!</h3>
+    <p class="bmodal-sub">Your request has been sent. I'll get back to you within 24 hours to confirm everything.</p>
+    <div class="bmodal-details" id="bmodal-details"></div>
+    <div class="bmodal-actions">
+      <a href="#" class="bmodal-gcal" id="bmodal-gcal" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Add to Google Calendar
+      </a>
+      <button class="bmodal-close" id="bmodal-close">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!--
+  ── GOOGLE CALENDAR SETUP (one-time) ──────────────────────────────────────
+  1. Go to script.google.com → New project
+  2. Paste this code and save:
+
+    function doPost(e) {
+      try {
+        var data = JSON.parse(e.postData.contents);
+        var cal  = CalendarApp.getDefaultCalendar();
+        cal.createEvent(data.title, new Date(data.start), new Date(data.end), {
+          description: data.description
+        });
+      } catch(err) { Logger.log(err); }
+      return ContentService.createTextOutput('OK');
+    }
+
+  3. Deploy → New deployment → Web app
+     Execute as: Me · Who has access: Anyone → Deploy
+  4. Copy the deployment URL and replace YOUR_APPS_SCRIPT_URL in the JS below
+  ──────────────────────────────────────────────────────────────────────── -->
+
+<!-- EmailJS — replace the three placeholders with your EmailJS credentials -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // ⚙️  EmailJS setup — sign up at emailjs.com (free), then:
+  //   1. Create a service connected to laura.elena.comanac@gmail.com
+  //   2. Create an email template with variables: {{session_type}}, {{session_date}}, {{session_time}}, {{session_duration}}
+  //   3. Replace the three strings below
+  const EMAILJS_PUBLIC_KEY  = 'q97xA1L0rCQT-kiCm';   // Account → API Keys
+  const EMAILJS_SERVICE_ID  = 'service_c6dk8qu';   // Email Services tab
+  const EMAILJS_TEMPLATE_ID = 'template_c1hf7l7';  // Email Templates tab
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+</script>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Laura Comanac<span>.</span></div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
+    <a href="laura-portfolio-redesign.html">Portfolio</a>
+    <a href="mailto:laura.elena.comanac@namadgi.com">Email</a>
+  </div>
+  <div class="footer-copy">© 2026 Laura Comanac. All rights reserved.</div>
+</footer>
+
+<script>
+  // CURSOR
+  const dot = document.getElementById('c-dot'), ring = document.getElementById('c-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button,.why-card,.srv-card,.testi-card,.price-card,.faq-q,.process-step').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('c-h'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('c-h'));
+  });
+
+  // WHY CARD RADIAL GRADIENT
+  document.querySelectorAll('.why-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      card.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      card.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  // NAV SCROLL
+  window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('stuck',scrollY>60),{passive:true});
+
+  // REVEAL
+  const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+  // COUNTERS
+  const cntObs=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(!e.isIntersecting||e.target.dataset.done)return;
+    e.target.dataset.done='1';
+    const target=+e.target.dataset.target, dur=1600;
+    let start=null;
+    requestAnimationFrame(function tick(ts){
+      if(!start)start=ts;
+      const p=Math.min((ts-start)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      e.target.textContent=Math.round(ease*target);
+      if(p<1)requestAnimationFrame(tick);
+    });
+  }),{threshold:.5});
+  document.querySelectorAll('.cnt').forEach(el=>cntObs.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(q=>{
+    q.addEventListener('click',()=>{
+      const item=q.parentElement;
+      const wasOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen)item.classList.add('open');
+    });
+  });
+
+  /* ── BOOKING WIDGET ── */
+  (function(){
+    const MORNING = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
+    const AFTERNOON = ['1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    const today = new Date();
+    let view = { y: today.getFullYear(), m: today.getMonth() };
+    let selectedDate = null;
+    let selectedSlot = null;
+    let sessionMins = 30;
+    let sessionLabel = 'Intro Call';
+
+    const elMonth = document.getElementById('cal-month');
+    const elGrid  = document.getElementById('cal-grid');
+    const elTimes = document.getElementById('book-times');
+    const elTimesDate = document.getElementById('book-times-date');
+    const elMorning   = document.getElementById('slots-morning');
+    const elAfternoon = document.getElementById('slots-afternoon');
+    const elConfirm   = document.getElementById('book-confirm');
+    const elSummary   = document.getElementById('book-confirm-summary');
+    const elBtn       = document.getElementById('book-confirm-btn');
+
+    function renderCalendar() {
+      elMonth.textContent = MONTHS[view.m] + ' ' + view.y;
+      elGrid.innerHTML = '';
+      const first = new Date(view.y, view.m, 1);
+      const lastDay = new Date(view.y, view.m + 1, 0).getDate();
+      let startDow = first.getDay(); // 0=Sun
+      // shift so Monday=0
+      startDow = (startDow + 6) % 7;
+
+      for (let i = 0; i < startDow; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day cal-empty';
+        elGrid.appendChild(el);
+      }
+      for (let d = 1; d <= lastDay; d++) {
+        const date = new Date(view.y, view.m, d);
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.textContent = d;
+        const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isToday = date.toDateString() === today.toDateString();
+        const isSel = selectedDate && date.toDateString() === selectedDate.toDateString();
+        if (isPast) el.classList.add('cal-past');
+        if (isToday) el.classList.add('cal-today');
+        if (isSel) el.classList.add('cal-selected');
+        if (!isPast) el.addEventListener('click', () => selectDate(date));
+        elGrid.appendChild(el);
+      }
+    }
+
+    function selectDate(date) {
+      selectedDate = date;
+      selectedSlot = null;
+      renderCalendar();
+      const dow = DAYS[date.getDay()];
+      const label = dow + ', ' + MONTHS[date.getMonth()].slice(0,3) + ' ' + date.getDate();
+      elTimesDate.textContent = label + ' · ' + sessionMins + ' min';
+      renderSlots(elMorning, MORNING);
+      renderSlots(elAfternoon, AFTERNOON);
+      elTimes.style.display = 'block';
+      elConfirm.style.display = 'none';
+    }
+
+    function renderSlots(container, times) {
+      container.innerHTML = '';
+      times.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'slot-btn';
+        btn.textContent = t;
+        if (selectedSlot === t) btn.classList.add('selected');
+        btn.addEventListener('click', () => selectSlot(t));
+        container.appendChild(btn);
+      });
+    }
+
+    function selectSlot(slot) {
+      selectedSlot = slot;
+      renderSlots(elMorning, MORNING);
+      renderSlots(elAfternoon, AFTERNOON);
+      const dow = DAYS[selectedDate.getDay()];
+      const dateStr = dow + ', ' + MONTHS[selectedDate.getMonth()] + ' ' + selectedDate.getDate();
+      elSummary.textContent = slot + ' · ' + dateStr + ' · ' + sessionMins + ' min';
+      elBtn._bookingData = { slot, dateStr, sessionMins, sessionLabel, date: selectedDate };
+      elConfirm.style.display = 'flex';
+    }
+
+    /* ── Google Calendar helpers ── */
+    function parseTime(str) {
+      const [time, period] = str.split(' ');
+      let [h, m] = time.split(':').map(Number);
+      if (period === 'PM' && h !== 12) h += 12;
+      if (period === 'AM' && h === 12) h = 0;
+      return { h, m };
+    }
+    function toGCalStr(date) {
+      const p = n => String(n).padStart(2, '0');
+      return `${date.getFullYear()}${p(date.getMonth()+1)}${p(date.getDate())}T${p(date.getHours())}${p(date.getMinutes())}00`;
+    }
+
+    /* ── Confirm button → send email + calendar + show modal ── */
+    const overlay = document.getElementById('bmodal-overlay');
+    const bdetails = document.getElementById('bmodal-details');
+    document.getElementById('bmodal-close').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+    const nameInput  = document.getElementById('book-name');
+    const emailInput = document.getElementById('book-email');
+
+    elBtn.addEventListener('click', () => {
+      const d = elBtn._bookingData;
+      if (!d) return;
+
+      /* Validate */
+      const name  = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      let valid = true;
+      [nameInput, emailInput].forEach(el => el.classList.remove('input-error'));
+      if (!name)  { nameInput.classList.add('input-error');  nameInput.focus();  valid = false; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailInput.classList.add('input-error');
+        if (valid) emailInput.focus();
+        valid = false;
+      }
+      if (!valid) return;
+
+      /* Populate modal details */
+      bdetails.innerHTML = `
+        <div class="bmodal-row"><span class="bmodal-lbl">Name</span><span class="bmodal-val">${name}</span></div>
+        <div class="bmodal-row"><span class="bmodal-lbl">Type</span><span class="bmodal-val">${d.sessionLabel}</span></div>
+        <div class="bmodal-row"><span class="bmodal-lbl">Date</span><span class="bmodal-val">${d.dateStr}</span></div>
+        <div class="bmodal-row"><span class="bmodal-lbl">Time</span><span class="bmodal-val">${d.slot}</span></div>
+        <div class="bmodal-row"><span class="bmodal-lbl">Duration</span><span class="bmodal-val">${d.sessionMins} minutes</span></div>
+      `;
+
+      /* Send via EmailJS */
+      if (typeof emailjs !== 'undefined' && EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID') {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email:         'laura.elena.comanac@gmail.com',
+          reply_to:         email,
+          from_name:        name,
+          from_email:       email,
+          session_type:     d.sessionLabel,
+          session_date:     d.dateStr,
+          session_time:     d.slot,
+          session_duration: d.sessionMins + ' min',
+          message:          `New booking request:\n\nName: ${name}\nEmail: ${email}\n\nSession: ${d.sessionLabel}\nDate: ${d.dateStr}\nTime: ${d.slot}\nDuration: ${d.sessionMins} min`
+        }).catch(err => console.warn('EmailJS error:', err));
+      }
+
+      /* Build start / end Date objects */
+      const { h, m } = parseTime(d.slot);
+      const start = new Date(d.date.getFullYear(), d.date.getMonth(), d.date.getDate(), h, m);
+      const end   = new Date(start.getTime() + d.sessionMins * 60000);
+
+      /* Google Calendar link (visitor adds to their own calendar) */
+      const gcalTitle   = encodeURIComponent(`${d.sessionLabel} with Laura Comanac`);
+      const gcalDetails = encodeURIComponent(`Session: ${d.sessionLabel} (${d.sessionMins} min)\nWith: Laura Comanac\nBooking email: ${email}`);
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${gcalTitle}&dates=${toGCalStr(start)}/${toGCalStr(end)}&details=${gcalDetails}`;
+      document.getElementById('bmodal-gcal').href = gcalUrl;
+
+      /* Post to Google Apps Script → adds event to Laura's calendar */
+      const GCAL_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL'; // see setup instructions below
+      if (GCAL_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL') {
+        fetch(GCAL_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            title:       `${d.sessionLabel} — ${name}`,
+            start:       start.toISOString(),
+            end:         end.toISOString(),
+            description: `Client: ${name}\nEmail: ${email}\nSession: ${d.sessionLabel}\nDuration: ${d.sessionMins} min`
+          })
+        }).catch(err => console.warn('Calendar webhook error:', err));
+      }
+
+      /* Show modal */
+      overlay.classList.add('open');
+    });
+
+    document.getElementById('cal-prev').addEventListener('click', () => {
+      view.m--; if (view.m < 0) { view.m = 11; view.y--; }
+      renderCalendar();
+    });
+    document.getElementById('cal-next').addEventListener('click', () => {
+      view.m++; if (view.m > 11) { view.m = 0; view.y++; }
+      renderCalendar();
+    });
+
+    document.querySelectorAll('.book-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.book-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        sessionMins = parseInt(pill.dataset.mins);
+        sessionLabel = pill.dataset.label;
+        if (selectedDate) selectDate(selectedDate);
+      });
+    });
+
+    renderCalendar();
+  })();
+</script>
+</body>
+</html>
